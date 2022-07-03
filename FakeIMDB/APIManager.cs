@@ -43,9 +43,15 @@ namespace FakeIMDB
             {
                 foreach (KeyValuePair<string, string> item in dict) 
                 {
-                    if (dict.ContainsKey(item.Key))
+                    string[] possibleOptions = ConfigurationManager.AppSettings["ByTitle"].Split(", ");
+
+                    if (possibleOptions.Contains(item.Key))
                     {
                         addedString += String.Format("&{0}={1}", item.Key, item.Value);
+                    } 
+                    else
+                    {
+                        return addedString;
                     }
                 }
             } 
@@ -53,9 +59,15 @@ namespace FakeIMDB
             {
                 foreach (KeyValuePair<string, string> item in dict)
                 {
-                    if (dict.ContainsKey(item.Key))
+                    string[] possibleOptions = ConfigurationManager.AppSettings["BySearch"].Split(", ");
+
+                    if (possibleOptions.Contains(item.Key))
                     {
                         addedString += String.Format("&{0}={1}", item.Key, item.Value);
+                    }
+                    else
+                    {
+                        return addedString;
                     }
                 }
             }

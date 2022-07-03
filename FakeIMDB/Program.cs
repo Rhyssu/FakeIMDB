@@ -30,13 +30,15 @@ namespace FakeIMDB
                 }
 
                 Task<String> task = Task.Run (() => apiManager.GetResponse(data));
-                Movie? movie = JsonSerializer.Deserialize<Movie>(task.Result);
-                PropertyInfo[] properties = typeof(Movie).GetProperties();
-                foreach(PropertyInfo property in properties)
+                if (task.Result != string.Empty)
                 {
-                    Console.WriteLine(" {0} {1} ", property.Name, property.GetValue(movie));
+                    Movie? movie = JsonSerializer.Deserialize<Movie>(task.Result);
+                    PropertyInfo[] properties = typeof(Movie).GetProperties();
+                    foreach (PropertyInfo property in properties)
+                    {
+                        Console.WriteLine(" {0} {1} ", property.Name, property.GetValue(movie));
+                    }
                 }
-
                 Console.ReadLine();
                 Console.Clear();
             }
