@@ -1,4 +1,4 @@
-﻿using Core.Entities;
+﻿using Domain.Entities;
 using Domain.Commons.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,19 +10,18 @@ namespace Application.Interfaces.Repositories
 {
     public interface IMovieRepository
     {
-        Task<MovieFullInfo> GetMovieByTitle(string title,
+        Task<MovieInfo> GetMovieByTitle(string title,
                                             TypeOptions? type = null,
                                             int? year = null,
                                             PlotOptions plot = PlotOptions.Short);
 
-        Task<MovieFullInfo> GetMovieByID(string id,
+        Task<MovieInfo> GetMovieByID(string id,
                                          TypeOptions? type = null,
                                          int? year = null,
                                          PlotOptions plot = PlotOptions.Short);
 
-        Task<MovieSearchList> GetMovieListByTitle(string title,
+        Task<MovieList> GetMovieListByTitle(string title,
                                                   TypeOptions? type = null,
-                                                  int? year = null,
-                                                  int? page = null); 
+                                                  int? year = null); 
     }
 }

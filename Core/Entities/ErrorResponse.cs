@@ -8,8 +8,16 @@ namespace Domain.Entities
 { 
     public class ErrorResponse
     {
-        public string? Response { get; set; }
-        public string? Error { get; set; }
+        public string Response { get; set; }
+        public string Error { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine($"Response     : {Response}");
+            stringBuilder.AppendLine($"Error        : {Error}");
+            return stringBuilder.ToString();
+        }
     }
 
 }

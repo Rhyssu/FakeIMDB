@@ -8,7 +8,6 @@ namespace Domain.Commons.Enums
 {
     public enum PlotOptions
     {
-        Short,
-        Full
+        Short, Full
     }
 }
