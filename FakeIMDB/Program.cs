@@ -9,7 +9,7 @@ namespace FakeIMDB
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             APIManager apiManager = new APIManager();
             while(true)
@@ -29,16 +29,8 @@ namespace FakeIMDB
                     }
                 }
 
-                Task<String> task = Task.Run (() => apiManager.GetResponse(data));
-                if (task.Result != string.Empty)
-                {
-                    Movie? movie = JsonSerializer.Deserialize<Movie>(task.Result);
-                    PropertyInfo[] properties = typeof(Movie).GetProperties();
-                    foreach (PropertyInfo property in properties)
-                    {
-                        Console.WriteLine(" {0} {1} ", property.Name, property.GetValue(movie));
-                    }
-                }
+                await apiManager.GetResponse(data);
+
                 Console.ReadLine();
                 Console.Clear();
             }

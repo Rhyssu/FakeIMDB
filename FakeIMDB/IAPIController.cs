@@ -8,24 +8,16 @@ namespace FakeIMDB
 {
     internal interface IAPIController
     {
-        static private HttpClient? Client
-        {
-            get;
-        }
+        Task<string> GetResponse(Dictionary<string, string> APIParameters);
 
-        static private string? APIKey
-        {
-            get;
-        }
+        Task<string> CheckResponse();
 
-        static private string? BaseUriAddress
-        {
-            get;
-        }
+        Task<BySearchDOM> BySearch(string title);
 
-        Task<String> GetResponse(Dictionary<string, string> dict);
-
-        Task<String> CheckResponse();
-
+        // SearchByTitle / ID / Search
+        // movie type by enum
+        // year as another nullable function argument
+        // page -||- 
+        // 
     }
 }
