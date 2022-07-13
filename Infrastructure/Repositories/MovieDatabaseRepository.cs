@@ -21,17 +21,18 @@ namespace Infrastructure.Repositories
         }
 
         public IQueryable<MovieInfoCache> GetAllMovies() 
-            => context.MovieInfo.Include(x => x.MovieInfo);
+            => context.MovieInfoCaches.Include(x => x.MovieInfo);
 
         public IQueryable<MovieListCache> GetAllMoviesLists()
-            => context.MovieList.Include(x => x.MovieList);
+            => context.MovieListCaches.Include(x => x.MovieList);
 
-        public async Task AddMovieToDatabaseAsync(MovieInfo movie)
+        public async Task AddMovieToDatabaseAsync(MovieInfoCache movie)
         {
             context.Add(movie);
             await context.SaveChangesAsync();
         }
-        public async Task AddMovieListToDatabaseAsync(MovieList movieList)
+
+        public async Task AddMovieListToDatabaseAsync(MovieListCache movieList)
         {
             context.Add(movieList);
             await context.SaveChangesAsync();

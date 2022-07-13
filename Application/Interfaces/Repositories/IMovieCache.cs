@@ -12,8 +12,8 @@ namespace Application.Interfaces.Repositories
     {
         IQueryable<MovieInfoCache> GetAllMovies();
         IQueryable<MovieListCache> GetAllMoviesLists();
-        Task AddMovieToDatabaseAsync (MovieInfo movie);
-        Task AddMovieListToDatabaseAsync (MovieList movieList);
+        Task AddMovieToDatabaseAsync (MovieInfoCache movie);
+        Task AddMovieListToDatabaseAsync (MovieListCache movieList);
         
         // TODO: Something to clear the cache with? // Or maybe somethings that clears the database after some time has passed.
     }

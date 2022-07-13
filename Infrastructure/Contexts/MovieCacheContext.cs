@@ -10,9 +10,9 @@ namespace Infrastructure.Contexts
 {
     public class MovieCacheContext : DbContext
     {
-        public DbSet<MovieInfoCache> MovieInfo { get; set; }
-        public DbSet<MovieListCache> MovieList { get; set; }
-
+        public DbSet<MovieInfoCache> MovieInfoCaches { get; set; }
+        public DbSet<MovieListCache> MovieListCaches { get; set; } 
+        public DbSet<MovieInfo> MovieInfos { get; set; }
         public MovieCacheContext() => this.Database.EnsureCreated();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,10 +27,22 @@ namespace Infrastructure.Contexts
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MovieListCache>()
+            modelBuilder.Entity<Rating>()
                 .HasKey(x => x.ID);
 
+            modelBuilder.Entity<MovieInfo>()
+                .HasKey(x => x.imdbID);
+
             modelBuilder.Entity<MovieInfoCache>()
+                .HasKey(x => x.ID);
+
+            modelBuilder.Entity<MovieShortInfo>()
+                .HasKey(x => x.imdbID);
+
+            modelBuilder.Entity<MovieList>()
+                .HasKey(x => x.ID);
+
+            modelBuilder.Entity<MovieListCache>()
                 .HasKey(x => x.ID);
         }
     }

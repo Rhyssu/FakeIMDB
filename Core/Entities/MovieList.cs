@@ -12,6 +12,7 @@ namespace Domain.Entities
         public MovieShortInfo[] Search { get; set; }
         public string totalResults { get; set; }
         public string Response { get; set; }
+        public Guid ID { get; } = Guid.NewGuid();
 
         public override string ToString()
         {
