@@ -33,6 +33,7 @@ namespace Domain.Entities
         public string Production { get; set; }
         public string Website { get; set; }
         public string Response { get; set; }
+        public Guid ID { get; } = Guid.NewGuid();
 
         public override string ToString()
         {

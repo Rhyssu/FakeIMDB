@@ -12,7 +12,6 @@ namespace Infrastructure.Contexts
     {
         public DbSet<MovieInfoCache> MovieInfoCaches { get; set; }
         public DbSet<MovieListCache> MovieListCaches { get; set; } 
-        public DbSet<MovieInfo> MovieInfos { get; set; }
         public MovieCacheContext() => this.Database.EnsureCreated();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -31,13 +30,13 @@ namespace Infrastructure.Contexts
                 .HasKey(x => x.ID);
 
             modelBuilder.Entity<MovieInfo>()
-                .HasKey(x => x.imdbID);
+                .HasKey(x => x.ID);
 
             modelBuilder.Entity<MovieInfoCache>()
                 .HasKey(x => x.ID);
 
             modelBuilder.Entity<MovieShortInfo>()
-                .HasKey(x => x.imdbID);
+                .HasKey(x => x.ID);
 
             modelBuilder.Entity<MovieList>()
                 .HasKey(x => x.ID);

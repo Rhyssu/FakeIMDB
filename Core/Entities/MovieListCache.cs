@@ -10,6 +10,7 @@ namespace Domain.Entities
             this.QueryTitle = title;
             this.MovieList = movieList;
             this.MediaType = mediaType;
+            this.CreationDate = DateTime.UtcNow;
         }
         public MovieListCache()
         {
@@ -20,6 +21,6 @@ namespace Domain.Entities
         public Guid ID { get; } = Guid.NewGuid();
         public MovieList MovieList { get; init; }
         public TypeOptions? MediaType { get; init; }
-        public DateTime CreationDate { get; } = DateTime.UtcNow;
+        public DateTime CreationDate { get; init; } 
     }
 }

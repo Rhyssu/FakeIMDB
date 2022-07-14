@@ -26,6 +26,7 @@ namespace Application.Implementations.Services
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
                 .Where(x => x.PlotOption == plot)
+                .Where(x => (DateTime.UtcNow - x.CreationDate).Days == 0)
                 .FirstOrDefault();
 
             if (allMovies != null)
@@ -46,7 +47,7 @@ namespace Application.Implementations.Services
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
                 MovieInfo newMovie = await movieRepository.GetMovieByID(id, type, year, plot);
                 MovieInfoCache newMovieInfoCache = new(newMovie, id, type, year, plot);
-                _ = movieCache.AddMovieToDatabaseAsync(newMovieInfoCache);
+                await movieCache.AddMovieToDatabaseAsync(newMovieInfoCache);
                 return newMovie;
             }
         }
@@ -58,6 +59,7 @@ namespace Application.Implementations.Services
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
                 .Where(x => x.PlotOption == plot)
+                .Where(x => (DateTime.UtcNow - x.CreationDate).Days == 0)
                 .FirstOrDefault();
 
             if (allMovies != null)
@@ -78,17 +80,18 @@ namespace Application.Implementations.Services
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
                 MovieInfo newMovie = await movieRepository.GetMovieByTitle(title, type, year, plot);
                 MovieInfoCache newMovieInfoCache = new(newMovie, title, type, year, plot);
-                _ = movieCache.AddMovieToDatabaseAsync(newMovieInfoCache);
+                await movieCache.AddMovieToDatabaseAsync(newMovieInfoCache);
                 return newMovie;
             }
         }
 
-        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null)
+        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null, int? page = null)
         {
             var allMovies = movieCache.GetAllMoviesLists()
                 .Where(x => x.QueryTitle == title)
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
+                .Where(x => (DateTime.UtcNow - x.CreationDate).Days == 0)
                 .FirstOrDefault();
 
             if (allMovies != null)
@@ -107,7 +110,7 @@ namespace Application.Implementations.Services
             else
             {
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
-                MovieList newList = await movieRepository.GetMovieListByTitle(title, type, year);
+                MovieList newList = await movieRepository.GetMovieListByTitle(title, type, year, page);
                 MovieListCache newMoveListCache = new(newList, title, type, year);
                 await movieCache.AddMovieListToDatabaseAsync(newMoveListCache);
                 return newList;

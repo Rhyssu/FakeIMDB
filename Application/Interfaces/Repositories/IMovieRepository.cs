@@ -22,6 +22,7 @@ namespace Application.Interfaces.Repositories
 
         Task<MovieList> GetMovieListByTitle(string title,
                                                   TypeOptions? type = null,
-                                                  int? year = null); 
+                                                  int? year = null,
+                                                  int? page = null); 
     }
 }

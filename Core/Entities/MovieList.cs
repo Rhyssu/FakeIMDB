@@ -12,6 +12,7 @@ namespace Domain.Entities
         public List<MovieShortInfo> Search { get; set; }
         public string totalResults { get; set; }
         public string Response { get; set; }
+        public int Page { get; set; }
         public Guid ID { get; } = Guid.NewGuid();
 
         public override string ToString()
@@ -31,7 +32,8 @@ namespace Domain.Entities
     public class MovieShortInfo
     {
         public string Title { get; set; }
-        public string Year { get; set; } 
+        public string Year { get; set; }
+        public Guid ID { get; } = Guid.NewGuid();
         public string imdbID { get; set; }
         public string Type { get; set; }
         public string Poster { get; set; }

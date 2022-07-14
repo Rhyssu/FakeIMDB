@@ -42,9 +42,9 @@ namespace Infrastructure.Repositories
             return newMovie;
         }
 
-        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null)
+        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null, int? page = null)
         {
-            string query = ConstructMovieListQuery(title, type, year);
+            string query = ConstructMovieListQuery(title, type, year, page);
             string response = await APIResponseBody(query);
             TryToDeserialize<MovieList>(response, out var newList);
             return newList;
@@ -86,7 +86,7 @@ namespace Infrastructure.Repositories
             return string.Join("&", movieParameters);
         }
 
-        private string ConstructMovieListQuery(string title, TypeOptions? type = null, int? year = null)
+        private string ConstructMovieListQuery(string title, TypeOptions? type = null, int? year = null, int? page = null)
         {
             var movieParameters = new List<string> { $"/?s={title}" };
             if (type.HasValue)
@@ -96,6 +96,10 @@ namespace Infrastructure.Repositories
             if (year.HasValue)
             {
                 movieParameters.Add($"y={year}");
+            }
+            if (page.HasValue)
+            {
+                movieParameters.Add($"page={page}");
             }
 
             movieParameters.Add($"apikey={APIKey}");

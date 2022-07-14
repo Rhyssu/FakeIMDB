@@ -16,6 +16,7 @@ namespace Domain.Entities
             this.MediaType = mediaType;
             this.Query = query;
             this.PlotOption = plotOptions;
+            this.CreationDate = DateTime.UtcNow;
         }
         public MovieInfoCache()
         {
@@ -27,6 +28,6 @@ namespace Domain.Entities
         public int? Year { get; init; }
         public Guid ID { get; } = Guid.NewGuid();
         public PlotOptions PlotOption { get; init; }
-        public DateTime CreationDate { get; } = DateTime.UtcNow;
+        public DateTime CreationDate { get; init; }
     }
 }
