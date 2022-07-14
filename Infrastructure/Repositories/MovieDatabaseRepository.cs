@@ -28,13 +28,13 @@ namespace Infrastructure.Repositories
 
         public async Task AddMovieToDatabaseAsync(MovieInfoCache movie)
         {
-            context.Add(movie);
+            await context.AddAsync(movie);
             await context.SaveChangesAsync();
         }
 
         public async Task AddMovieListToDatabaseAsync(MovieListCache movieList)
         {
-            context.Add(movieList);
+            await context.AddAsync(movieList);
             await context.SaveChangesAsync();
         }
     }

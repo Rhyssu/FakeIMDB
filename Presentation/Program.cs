@@ -14,7 +14,7 @@ namespace FakeIMDB
 {
     public class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             HttpClient client = new();
             var logger = new LoggerConfiguration()
@@ -49,7 +49,7 @@ namespace FakeIMDB
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieID))
                     {
-                        MovieInfo newMovie = movieService.GetMovieByID(movieID).Result;
+                        MovieInfo newMovie = await movieService.GetMovieByID(movieID);
                         if (newMovie != null)
                         {
                             Console.WriteLine(newMovie.ToString());
@@ -63,7 +63,7 @@ namespace FakeIMDB
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieTitle))
                     {
-                        MovieInfo newMovie = movieService.GetMovieByTitle(movieTitle).Result;
+                        MovieInfo newMovie = await movieService.GetMovieByTitle(movieTitle);
                         if (newMovie != null)
                         {
                             Console.WriteLine(newMovie.ToString());
@@ -77,7 +77,7 @@ namespace FakeIMDB
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieTitle))
                     {
-                        MovieList newList = movieService.GetMovieListByTitle(movieTitle).Result;
+                        MovieList newList = await movieService.GetMovieListByTitle(movieTitle);
                         if (newList != null)
                         {
                             Console.WriteLine(newList.ToString());

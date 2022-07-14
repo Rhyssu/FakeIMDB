@@ -26,28 +26,28 @@ namespace Infrastructure.Repositories
             this.movieDatabaseRepository = new MovieDatabaseRepository(movieCacheContext);
         }
 
-        public Task<MovieInfo> GetMovieByID(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        public async Task<MovieInfo> GetMovieByID(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
         {
             string query = ConstructGetByIDQuery(id, type, year, plot);
-            string response = APIResponseBody(query).Result;
+            string response = await APIResponseBody(query);
             TryToDeserialize<MovieInfo>(response, out var newMovie);
-            return Task.FromResult(newMovie);
+            return newMovie;
         }
 
-        public Task<MovieInfo> GetMovieByTitle(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        public async Task<MovieInfo> GetMovieByTitle(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
         {
             string query = ConstructGetByTitleQuery(title, type, year, plot);
-            string response = APIResponseBody(query).Result;
+            string response = await APIResponseBody(query);
             TryToDeserialize<MovieInfo>(response, out var newMovie);
-            return Task.FromResult(newMovie);
+            return newMovie;
         }
 
-        public Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null)
+        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null)
         {
             string query = ConstructMovieListQuery(title, type, year);
-            string response = APIResponseBody(query).Result;
+            string response = await APIResponseBody(query);
             TryToDeserialize<MovieList>(response, out var newList);
-            return Task.FromResult(newList);
+            return newList;
         }
 
         private string ConstructGetByTitleQuery(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)

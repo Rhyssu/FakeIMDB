@@ -19,7 +19,7 @@ namespace Application.Implementations.Services
             this.serviceLogger = serviceLogger;
         }
 
-        public Task<MovieInfo> GetMovieByID(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        public async Task<MovieInfo> GetMovieByID(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
         {
             var allMovies = movieCache.GetAllMovies()
                 .Where(x => x.Query == id)
@@ -31,19 +31,19 @@ namespace Application.Implementations.Services
             if (allMovies != null)
             {
                 serviceLogger.LogDebug("Znaleziono informacje o filmie w pamieci cache!");
-                return Task.FromResult(allMovies.MovieInfo);
+                return allMovies.MovieInfo;
             }
             else
             {
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
-                MovieInfo newMovie = movieRepository.GetMovieByID(id, type, year, plot).Result;
+                MovieInfo newMovie = await movieRepository.GetMovieByID(id, type, year, plot);
                 MovieInfoCache newMovieInfoCache = new(newMovie, id, type, year, plot);
                 _ = movieCache.AddMovieToDatabaseAsync(newMovieInfoCache);
-                return Task.FromResult(newMovie);
+                return newMovie;
             }
         }
 
-        public Task<MovieInfo> GetMovieByTitle(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        public async Task<MovieInfo> GetMovieByTitle(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
         {
             var allMovies = movieCache.GetAllMovies()
                 .Where(x => x.Query == title)
@@ -55,19 +55,19 @@ namespace Application.Implementations.Services
             if (allMovies != null)
             {
                 serviceLogger.LogDebug("Znaleziono informacje o filmie w pamieci cache!");
-                return Task.FromResult(allMovies.MovieInfo);
+                return allMovies.MovieInfo;
             }
             else
             {
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
-                MovieInfo newMovie = movieRepository.GetMovieByTitle(title, type, year, plot).Result;
+                MovieInfo newMovie = await movieRepository.GetMovieByTitle(title, type, year, plot);
                 MovieInfoCache newMovieInfoCache = new(newMovie, title, type, year, plot);
                 _ = movieCache.AddMovieToDatabaseAsync(newMovieInfoCache);
-                return Task.FromResult(newMovie);
+                return newMovie;
             }
         }
 
-        public Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null)
+        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null)
         {
             var allMovies = movieCache.GetAllMoviesLists()
                 .Where(x => x.QueryTitle == title)
@@ -78,15 +78,15 @@ namespace Application.Implementations.Services
             if (allMovies != null)
             {
                 serviceLogger.LogDebug("Znaleziono informacje o filmie w pamieci cache!");
-                return Task.FromResult(allMovies.MovieList);
+                return allMovies.MovieList;
             }
             else
             {
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
-                MovieList newList = movieRepository.GetMovieListByTitle(title, type, year).Result;
+                MovieList newList = await movieRepository.GetMovieListByTitle(title, type, year);
                 MovieListCache newMoveListCache = new(newList, title, type, year);
-                _ = movieCache.AddMovieListToDatabaseAsync(newMoveListCache);
-                return Task.FromResult(newList);
+                await movieCache.AddMovieListToDatabaseAsync(newMoveListCache);
+                return newList;
             }
         }
     }
