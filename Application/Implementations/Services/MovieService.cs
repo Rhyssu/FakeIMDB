@@ -30,8 +30,16 @@ namespace Application.Implementations.Services
 
             if (allMovies != null)
             {
-                serviceLogger.LogDebug("Znaleziono informacje o filmie w pamieci cache!");
-                return allMovies.MovieInfo;
+                serviceLogger.LogDebug("Znaleziono wpis w pamieci cache!");
+                if (allMovies.MovieInfo != null)
+                {
+                    return allMovies.MovieInfo;
+                } 
+                else
+                {
+                    serviceLogger.LogDebug("Nie znaleziono informacji o filmie!");
+                    return allMovies.MovieInfo;
+                }
             }
             else
             {
@@ -54,8 +62,16 @@ namespace Application.Implementations.Services
 
             if (allMovies != null)
             {
-                serviceLogger.LogDebug("Znaleziono informacje o filmie w pamieci cache!");
-                return allMovies.MovieInfo;
+                serviceLogger.LogDebug("Znaleziono wpis w pamieci cache!");
+                if (allMovies.MovieInfo != null)
+                {
+                    return allMovies.MovieInfo;
+                }
+                else
+                {
+                    serviceLogger.LogDebug("Nie znaleziono informacji o filmie!");
+                    return allMovies.MovieInfo;
+                }
             }
             else
             {
@@ -77,8 +93,16 @@ namespace Application.Implementations.Services
 
             if (allMovies != null)
             {
-                serviceLogger.LogDebug("Znaleziono informacje o filmie w pamieci cache!");
-                return allMovies.MovieList;
+                serviceLogger.LogDebug("Znaleziono wpis w pamieci cache!");
+                if (allMovies.MovieList != null)
+                {
+                    return allMovies.MovieList;
+                }
+                else
+                {
+                    serviceLogger.LogDebug("Nie znaleziono informacji o liscie filmow!");
+                    return allMovies.MovieList;
+                }
             }
             else
             {
