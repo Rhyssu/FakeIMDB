@@ -38,11 +38,11 @@ namespace Domain.Entities
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Title    : {Title}");
-            stringBuilder.AppendLine($"Year     : {Year}");
-            stringBuilder.AppendLine($"imdbID   : {imdbID}");
-            stringBuilder.AppendLine($"Type     : {Type}");
-            stringBuilder.AppendLine($"Poster   : {Poster}");
+            stringBuilder.AppendLine($"Title        : {Title}");
+            stringBuilder.AppendLine($"Year         : {Year}");
+            stringBuilder.AppendLine($"imdbID       : {imdbID}");
+            stringBuilder.AppendLine($"Type         : {Type}");
+            stringBuilder.AppendLine($"Poster       : {Poster}");
             return stringBuilder.ToString();
         }
     }
