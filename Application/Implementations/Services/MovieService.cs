@@ -26,7 +26,7 @@ namespace Application.Implementations.Services
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
                 .Where(x => x.PlotOption == plot)
-                .Where(x => (DateTime.UtcNow - x.CreationDate).Days == 0)
+                .Where(x => DateTime.Now <= x.CreationDate.AddDays(1))
                 .FirstOrDefault();
 
             if (allMovies != null)
@@ -59,7 +59,7 @@ namespace Application.Implementations.Services
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
                 .Where(x => x.PlotOption == plot)
-                .Where(x => (DateTime.UtcNow - x.CreationDate).Days == 0)
+                .Where(x => DateTime.Now <= x.CreationDate.AddDays(1))
                 .FirstOrDefault();
 
             if (allMovies != null)
@@ -91,7 +91,7 @@ namespace Application.Implementations.Services
                 .Where(x => x.QueryTitle == title)
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
-                .Where(x => (DateTime.UtcNow - x.CreationDate).Days == 0)
+                .Where(x => DateTime.Now <= x.CreationDate.AddDays(1))
                 .FirstOrDefault();
 
             if (allMovies != null)
