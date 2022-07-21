@@ -1,98 +1,46 @@
-﻿using Infrastructure.Commons;
-using Infrastructure.Repositories;
-using Domain.Entities;
-using Serilog;
-using Serilog.Extensions.Logging;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Application.Implementations.Services;
-using Domain.Commons.Enums;
-using Infrastructure.Contexts;
+﻿using Application.Implementations.Services;
 using Application.Interfaces.Repositories;
+using Application.Interfaces.Services;
+using Infrastructure.Contexts;
+using Infrastructure.Repositories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
-namespace FakeIMDB
+namespace Presentation
 {
     public class Program
     {
+        private static void AddServices(HostBuilderContext context, IServiceCollection services)
+        {
+            services.AddHostedService<ConsoleUIService>();
+            services.AddScoped<IMovieService, MovieService>();
+            services.AddScoped<IMovieRepository, OMDBMovieRepository>();
+            services.AddScoped<IMovieCache, MovieDatabaseRepository>();
+
+            services.AddHttpClient();
+            services.AddDbContext<MovieCacheContext>();
+        }
+
         static async Task Main(string[] args)
         {
-            HttpClient client = new();
-            var logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
-                .WriteTo.Console()
-                .WriteTo.Seq("http://localhost:5341/")
-                .CreateLogger();
+            var host = Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context, config) => config
+                    .AddJsonFile("appsettings.json")
+                    .AddUserSecrets<Program>(true))
+                .ConfigureServices(AddServices)
+                .UseSerilog((context, loggerConfig) => loggerConfig
+                    .WriteTo.Console()
+                    .WriteTo.Seq("http://localhost:5341/")
+                    .MinimumLevel.Verbose())
+                .Build();
 
-            var msLogger = new SerilogLoggerFactory(logger).CreateLogger<OMDBMovieRepository>();
-            var movieCacheLogger = new SerilogLoggerFactory(logger).CreateLogger<MovieService>();
-            var movieCacheContext = new MovieCacheContext();
-            var movieDatabaseRepository = new MovieDatabaseRepository(movieCacheContext);
-            Serilog.Debugging.SelfLog.Enable(Console.Error);
-            logger.Information("Hello, {Name}!", Environment.UserName);
+            var logger = host.Services.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Hello, {Name}!", Environment.UserName);
 
-            OMDBMovieRepository movieRepository = new OMDBMovieRepository(client, "c340b01e", msLogger);
-            MovieService movieService = new MovieService(movieDatabaseRepository, movieRepository, movieCacheLogger);
-
-            while (true)
-            {
-                Console.WriteLine("Siemaneczko, wybierz co chcialbys zrobic: ");
-                Console.WriteLine("1. Wyswietlic informacje o filmie po ID.");
-                Console.WriteLine("2. Wyswietlic informacje o filmie po tytule.");
-                Console.WriteLine("3. Wyszukac film po nazwie.");
-                Console.WriteLine("4. Debug.");
-                string key = Console.ReadLine();
-
-                if (key == "1")
-                {
-                    Console.WriteLine("Podaj ID filmu: ");
-                    string movieID = Console.ReadLine();
-                    Console.Clear();
-                    if (!string.IsNullOrEmpty(movieID))
-                    {
-                        MovieInfo newMovie = await movieService.GetMovieByID(movieID);
-                        if (newMovie != null)
-                        {
-                            Console.WriteLine(newMovie.ToString());
-                        }
-                    }
-                }
-                else if (key == "2")
-                {
-                    Console.WriteLine("Podaj tytul filmu: ");
-                    string movieTitle = Console.ReadLine();
-                    Console.Clear();
-                    if (!string.IsNullOrEmpty(movieTitle))
-                    {
-                        MovieInfo newMovie = await movieService.GetMovieByTitle(movieTitle);
-                        if (newMovie != null)
-                        {
-                            Console.WriteLine(newMovie.ToString());
-                        }
-                    }
-                }
-                else if (key == "3")
-                {
-                    Console.WriteLine("Podaj tytul filmu: ");
-                    string movieTitle = Console.ReadLine();
-                    Console.Clear();
-                    if (!string.IsNullOrEmpty(movieTitle))
-                    {
-                        MovieList newList = await movieService.GetMovieListByTitle(movieTitle);
-                        if (newList != null)
-                        {
-                            Console.WriteLine(newList.ToString());
-                        }
-                    }
-                }
-                else if (key == "4")
-                {
-
-                }
-                Console.ReadKey();
-                Console.Clear();
-                logger.Dispose();
-            }
-
+            await host.RunAsync();
         }
     }
 }

@@ -5,6 +5,7 @@ using Domain.Commons.Enums;
 using Domain.Exceptions;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Contexts;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Repositories
 {
@@ -14,16 +15,13 @@ namespace Infrastructure.Repositories
         private readonly HttpClient client;
         private readonly ILogger<OMDBMovieRepository> logger;
         private const string BaseUriAddress = "http://www.omdbapi.com";
-        private readonly MovieDatabaseRepository movieDatabaseRepository;
 
-        public OMDBMovieRepository(HttpClient client, string APIKey, ILogger<OMDBMovieRepository> logger)
+        public OMDBMovieRepository(IHttpClientFactory clientFactory, IConfiguration config, ILogger<OMDBMovieRepository> logger)
         {
-            this.client = client;
-            this.APIKey = APIKey;
+            this.client = clientFactory.CreateClient();
+            this.APIKey = config["apiKey"];
             this.logger = logger;
             client.BaseAddress = new Uri(BaseUriAddress);
-            var movieCacheContext = new MovieCacheContext();
-            this.movieDatabaseRepository = new MovieDatabaseRepository(movieCacheContext);
         }
 
         public async Task<MovieInfo> GetMovieByID(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
