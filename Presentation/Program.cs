@@ -18,6 +18,7 @@ namespace Presentation
         {
             services.AddHttpClient();
             services.AddHostedService<ConsoleUIService>();
+            
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, OMDBMovieRepository>();
             services.AddScoped<IMovieCache, MovieDatabaseRepository>();

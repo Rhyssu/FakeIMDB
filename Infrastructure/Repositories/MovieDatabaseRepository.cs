@@ -26,16 +26,16 @@ namespace Infrastructure.Repositories
         public IQueryable<MovieListCache> GetAllMoviesLists()
             => context.MovieListCaches.Include(x => x.MovieList);
 
-        public async Task AddMovieToDatabaseAsync(MovieInfoCache movie)
+        public async Task AddMovieToDatabaseAsync(MovieInfoCache movie, CancellationToken cancellationToken = default)
         {
-            await context.AddAsync(movie);
-            await context.SaveChangesAsync();
+            await context.AddAsync(movie, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
 
-        public async Task AddMovieListToDatabaseAsync(MovieListCache movieList)
+        public async Task AddMovieListToDatabaseAsync(MovieListCache movieList, CancellationToken cancellationToken = default)
         {
-            await context.AddAsync(movieList);
-            await context.SaveChangesAsync();
+            await context.AddAsync(movieList, cancellationToken);
+            await context.SaveChangesAsync(cancellationToken);
         }
     }
 }

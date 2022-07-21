@@ -26,31 +26,50 @@ namespace Infrastructure.Repositories
             client.BaseAddress = new Uri(BaseUriAddress);
         }
 
-        public async Task<MovieInfo> GetMovieByID(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        public async Task<MovieInfo> GetMovieByID(
+            string id,
+            TypeOptions? type = null,
+            int? year = null,
+            PlotOptions plot = PlotOptions.Short,
+            CancellationToken cancellationToken = default)
         {
             string query = ConstructGetByIDQuery(id, type, year, plot);
-            string response = await APIResponseBody(query);
+            string response = await APIResponseBody(query, cancellationToken);
             TryToDeserialize<MovieInfo>(response, out var newMovie);
             return newMovie;
         }
 
-        public async Task<MovieInfo> GetMovieByTitle(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        public async Task<MovieInfo> GetMovieByTitle(
+            string title,
+            TypeOptions? type = null,
+            int? year = null,
+            PlotOptions plot = PlotOptions.Short,
+            CancellationToken cancellationToken = default)
         {
             string query = ConstructGetByTitleQuery(title, type, year, plot);
-            string response = await APIResponseBody(query);
+            string response = await APIResponseBody(query, cancellationToken);
             TryToDeserialize<MovieInfo>(response, out var newMovie);
             return newMovie;
         }
 
-        public async Task<MovieList> GetMovieListByTitle(string title, TypeOptions? type = null, int? year = null, int? page = null)
+        public async Task<MovieList> GetMovieListByTitle(
+            string title,
+            TypeOptions? type = null,
+            int? year = null,
+            int? page = null,
+            CancellationToken cancellationToken = default)
         {
             string query = ConstructMovieListQuery(title, type, year, page);
-            string response = await APIResponseBody(query);
+            string response = await APIResponseBody(query, cancellationToken);
             TryToDeserialize<MovieList>(response, out var newList);
             return newList;
         }
 
-        private string ConstructGetByTitleQuery(string title, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        private string ConstructGetByTitleQuery(
+            string title,
+            TypeOptions? type = null,
+            int? year = null,
+            PlotOptions plot = PlotOptions.Short)
         {
             var movieParameters = new List<string>() { $"/?t={title}" };
             
@@ -68,7 +87,11 @@ namespace Infrastructure.Repositories
             return string.Join("&", movieParameters);
         }
 
-        private string ConstructGetByIDQuery(string id, TypeOptions? type = null, int? year = null, PlotOptions plot = PlotOptions.Short)
+        private string ConstructGetByIDQuery(
+            string id,
+            TypeOptions? type = null,
+            int? year = null,
+            PlotOptions plot = PlotOptions.Short)
         {
             var movieParameters = new List<string>() { $"/?i={id}" };
 
@@ -86,7 +109,11 @@ namespace Infrastructure.Repositories
             return string.Join("&", movieParameters);
         }
 
-        private string ConstructMovieListQuery(string title, TypeOptions? type = null, int? year = null, int? page = null)
+        private string ConstructMovieListQuery(
+            string title,
+            TypeOptions? type = null,
+            int? year = null,
+            int? page = null)
         {
             var movieParameters = new List<string> { $"/?s={title}" };
             if (type.HasValue)
@@ -106,13 +133,13 @@ namespace Infrastructure.Repositories
             return string.Join("&", movieParameters);
         }
 
-        private async Task<string> APIResponseBody(string query)
+        private async Task<string> APIResponseBody(string query, CancellationToken cancellationToken = default)
         {
             try
             {
-                HttpResponseMessage response = await client.GetAsync(query);
+                HttpResponseMessage response = await client.GetAsync(query, cancellationToken);
                 response.EnsureSuccessStatusCode();
-                string responseBody = await response.Content.ReadAsStringAsync();
+                string responseBody = await response.Content.ReadAsStringAsync(cancellationToken);
                 return responseBody;
 
             } 

@@ -15,7 +15,7 @@ namespace Presentation
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            while (true)
+            while (!stoppingToken.IsCancellationRequested)
             {
                 Console.WriteLine("Siemaneczko, wybierz co chcialbys zrobic: ");
                 Console.WriteLine("1. Wyswietlic informacje o filmie po ID.");
@@ -31,7 +31,7 @@ namespace Presentation
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieID))
                     {
-                        MovieInfo newMovie = await movieService.GetMovieByID(movieID);
+                        MovieInfo newMovie = await movieService.GetMovieByID(movieID, default, default, default, stoppingToken);
                         if (newMovie != null)
                         {
                             Console.WriteLine(newMovie.ToString());
@@ -45,7 +45,7 @@ namespace Presentation
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieTitle))
                     {
-                        MovieInfo newMovie = await movieService.GetMovieByTitle(movieTitle);
+                        MovieInfo newMovie = await movieService.GetMovieByTitle(movieTitle, default, default, default, stoppingToken);
                         if (newMovie != null)
                         {
                             Console.WriteLine(newMovie.ToString());
@@ -59,7 +59,7 @@ namespace Presentation
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieTitle))
                     {
-                        MovieList newList = await movieService.GetMovieListByTitle(movieTitle);
+                        MovieList newList = await movieService.GetMovieListByTitle(movieTitle, default, default, default, stoppingToken);
                         if (newList != null)
                         {
                             Console.WriteLine(newList.ToString());
