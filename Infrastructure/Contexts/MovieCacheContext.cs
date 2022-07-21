@@ -1,17 +1,19 @@
 ﻿using Domain.Entities;
+using Infrastructure.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Infrastructure.Contexts
 {
     public class MovieCacheContext : DbContext
     {
-        public IConfiguration config { get; set; }
+        public DatabaseSettings config { get; set; }
         public DbSet<MovieInfoCache> MovieInfoCaches { get; set; }
         public DbSet<MovieListCache> MovieListCaches { get; set; }
-        public MovieCacheContext(IConfiguration config)
+        public MovieCacheContext(IOptions<DatabaseSettings> options)
         {
-            this.config = config;
+            config = options.Value;
             this.Database.EnsureCreated();
         }
 
@@ -19,8 +21,10 @@ namespace Infrastructure.Contexts
         {
             if (!optionsBuilder.IsConfigured)
             {
-                // optionsBuilder.UseInMemoryDatabase("MoviesDatabase");
-                optionsBuilder.UseSqlServer(config["ConnectionString"]);
+                if (config.UseInMemoryDatabase)
+                    optionsBuilder.UseInMemoryDatabase("MoviesDatabase");
+                else
+                    optionsBuilder.UseSqlServer(config.ConnectionString);
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using Application.Implementations.Services;
 using Application.Interfaces.Repositories;
 using Application.Interfaces.Services;
+using Infrastructure.Common;
 using Infrastructure.Contexts;
 using Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -15,13 +16,15 @@ namespace Presentation
     {
         private static void AddServices(HostBuilderContext context, IServiceCollection services)
         {
+            services.AddHttpClient();
             services.AddHostedService<ConsoleUIService>();
             services.AddScoped<IMovieService, MovieService>();
             services.AddScoped<IMovieRepository, OMDBMovieRepository>();
             services.AddScoped<IMovieCache, MovieDatabaseRepository>();
-
-            services.AddHttpClient();
             services.AddDbContext<MovieCacheContext>();
+
+            services.Configure<APISettings>(context.Configuration.GetRequiredSection("APISettings"));
+            services.Configure<DatabaseSettings>(context.Configuration.GetRequiredSection("DatabaseSettings"));
         }
 
         static async Task Main(string[] args)

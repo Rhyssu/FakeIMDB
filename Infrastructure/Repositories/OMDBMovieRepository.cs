@@ -6,20 +6,22 @@ using Domain.Exceptions;
 using Microsoft.Extensions.Logging;
 using Infrastructure.Contexts;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using Infrastructure.Common;
 
 namespace Infrastructure.Repositories
 {
     public class OMDBMovieRepository : IMovieRepository
     {
-        private readonly string APIKey;
+        private readonly APISettings apiSettings;
         private readonly HttpClient client;
         private readonly ILogger<OMDBMovieRepository> logger;
         private const string BaseUriAddress = "http://www.omdbapi.com";
 
-        public OMDBMovieRepository(IHttpClientFactory clientFactory, IConfiguration config, ILogger<OMDBMovieRepository> logger)
+        public OMDBMovieRepository(IHttpClientFactory clientFactory, IOptions<APISettings> options, ILogger<OMDBMovieRepository> logger)
         {
             this.client = clientFactory.CreateClient();
-            this.APIKey = config["apiKey"];
+            this.apiSettings = options.Value;
             this.logger = logger;
             client.BaseAddress = new Uri(BaseUriAddress);
         }
@@ -62,7 +64,7 @@ namespace Infrastructure.Repositories
             }
 
             movieParameters.Add($"plot={plot}");
-            movieParameters.Add($"apikey={APIKey}");
+            movieParameters.Add($"apikey={apiSettings.APIKey}");
             return string.Join("&", movieParameters);
         }
 
@@ -80,7 +82,7 @@ namespace Infrastructure.Repositories
             }
 
             movieParameters.Add($"plot={plot}");
-            movieParameters.Add($"apikey={APIKey}");
+            movieParameters.Add($"apikey={apiSettings.APIKey}");
             return string.Join("&", movieParameters);
         }
 
@@ -100,7 +102,7 @@ namespace Infrastructure.Repositories
                 movieParameters.Add($"page={page}");
             }
 
-            movieParameters.Add($"apikey={APIKey}");
+            movieParameters.Add($"apikey={apiSettings.APIKey}");
             return string.Join("&", movieParameters);
         }
 
