@@ -31,7 +31,7 @@ namespace Presentation
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieID))
                     {
-                        MovieInfo newMovie = await movieService.GetMovieByID(movieID, default, default, default, stoppingToken);
+                        MovieInfo newMovie = await movieService.GetMovieByID(movieID, cancellationToken: stoppingToken);
                         if (newMovie != null)
                         {
                             Console.WriteLine(newMovie.ToString());
@@ -45,7 +45,7 @@ namespace Presentation
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieTitle))
                     {
-                        MovieInfo newMovie = await movieService.GetMovieByTitle(movieTitle, default, default, default, stoppingToken);
+                        MovieInfo newMovie = await movieService.GetMovieByTitle(movieTitle, cancellationToken: stoppingToken);
                         if (newMovie != null)
                         {
                             Console.WriteLine(newMovie.ToString());
@@ -59,7 +59,7 @@ namespace Presentation
                     Console.Clear();
                     if (!string.IsNullOrEmpty(movieTitle))
                     {
-                        MovieList newList = await movieService.GetMovieListByTitle(movieTitle, default, default, default, stoppingToken);
+                        MovieList newList = await movieService.GetMovieListByTitle(movieTitle, cancellationToken: stoppingToken);
                         if (newList != null)
                         {
                             Console.WriteLine(newList.ToString());

@@ -31,6 +31,7 @@ namespace Presentation
         static async Task Main(string[] args)
         {
             var host = Host.CreateDefaultBuilder(args)
+                .UseConsoleLifetime()
                 .ConfigureAppConfiguration((context, config) => config
                     .AddJsonFile("appsettings.json")
                     .AddUserSecrets<Program>(true))
