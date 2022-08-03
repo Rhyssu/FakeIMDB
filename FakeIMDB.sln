@@ -14,9 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Infrastru
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{2C971388-E2FE-4D4D-94C5-9906E6468781}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Presentation", "Presentation\Presentation.csproj", "{08280A20-F44A-41D5-A0CB-3B3629713E23}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FakeIMDB_GUI", "..\FakeIMDB_GUI\FakeIMDB_GUI\FakeIMDB_GUI.csproj", "{D80E4685-E648-48DC-AD14-A9874CEEB5F5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Presentation", "Presentation\Presentation.csproj", "{08280A20-F44A-41D5-A0CB-3B3629713E23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,10 +38,6 @@ Global
 		{08280A20-F44A-41D5-A0CB-3B3629713E23}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08280A20-F44A-41D5-A0CB-3B3629713E23}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08280A20-F44A-41D5-A0CB-3B3629713E23}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D80E4685-E648-48DC-AD14-A9874CEEB5F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D80E4685-E648-48DC-AD14-A9874CEEB5F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D80E4685-E648-48DC-AD14-A9874CEEB5F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D80E4685-E648-48DC-AD14-A9874CEEB5F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
