@@ -1,0 +1,129 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ColorLibrary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Styling-->
+
+    <Style x:Key="Style.Thumb" TargetType="{x:Type Thumb}">
+        <Setter Property="Template" Value="{DynamicResource Template.Thumb}" />
+        <Setter Property="Background" Value="{DynamicResource EnabledButtonColor}" />
+        <Setter Property="Width" Value="50" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource DisabledButtonColor}" />
+            </Trigger>
+            <Trigger Property="IsMouseCaptured" Value="True">
+                <Setter Property="Background" Value="{DynamicResource OnHoverButtonColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="Style.TransparentRepeatButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="Background" Value="{DynamicResource TextBoxColor}" />
+        <Setter Property="Template" Value="{DynamicResource Template.TransparentRepeatButton}" />
+    </Style>
+
+    <Style x:Key="Style.Scrollbar" TargetType="{x:Type ScrollBar}">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Template" Value="{DynamicResource Template.Scrollbar}" />
+    </Style>
+
+    <Style x:Key="Style.RepeatButton" TargetType="{x:Type RepeatButton}">
+        <Setter Property="Width" Value="20" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="Background" Value="{DynamicResource EnabledButtonColor}" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Template" Value="{DynamicResource Template.RepeatButton}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource DisabledButtonColor}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{DynamicResource OnHoverButtonColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--#endregion Styling-->
+
+    <!--#region ControlTemplates-->
+
+    <ControlTemplate x:Key="Template.Scrollbar" TargetType="{x:Type ScrollBar}">
+        <Grid x:Name="Background" SnapsToDevicePixels="True">
+            <Grid.RowDefinitions>
+                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
+                <RowDefinition Height="1*" />
+                <RowDefinition MaxHeight="{DynamicResource {x:Static SystemParameters.VerticalScrollBarButtonHeightKey}}" />
+            </Grid.RowDefinitions>
+            <RepeatButton Grid.Row="0"
+                          Command="{x:Static ScrollBar.LineUpCommand}"
+                          Style="{DynamicResource Style.RepeatButton}"
+                          >
+                <RepeatButton.Content>
+                    <Path Data="M0,3 1.5,0 3,3"
+                          Stretch="UniformToFill"
+                          Stroke="{DynamicResource OnHoverButtonColor}"
+                          />
+                </RepeatButton.Content>
+            </RepeatButton>
+
+            <Track x:Name="PART_Track"
+                   Grid.Row="1"
+                   Width="20"
+                   IsDirectionReversed="True"
+                   >
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Width="20"
+                                  HorizontalAlignment="Left"
+                                  Background="{DynamicResource TextBoxColor}"
+                                  Command="{x:Static ScrollBar.PageUpCommand}"
+                                  Style="{DynamicResource Style.TransparentRepeatButton}"
+                                  />
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{DynamicResource Style.Thumb}" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Background="{DynamicResource TextBoxColor}"
+                                  Command="{x:Static ScrollBar.PageDownCommand}"
+                                  Style="{DynamicResource Style.TransparentRepeatButton}"
+                                  />
+                </Track.IncreaseRepeatButton>
+            </Track>
+            <RepeatButton Grid.Row="2"
+                          Command="{x:Static ScrollBar.LineDownCommand}"
+                          Style="{DynamicResource Style.RepeatButton}"
+                          >
+                <RepeatButton.Content>
+                    <Path Data="M0,0 1.5,3 3,0"
+                          Stretch="UniformToFill"
+                          Stroke="{DynamicResource OnHoverButtonColor}"
+                          />
+                </RepeatButton.Content>
+            </RepeatButton>
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Template.Thumb" TargetType="{x:Type Thumb}">
+        <Border Background="{TemplateBinding Background}" />
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Template.TransparentRepeatButton" TargetType="{x:Type RepeatButton}">
+        <Border Background="{TemplateBinding Background}">
+            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </Border>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Template.RepeatButton" TargetType="{x:Type RepeatButton}">
+        <Border Background="{TemplateBinding Background}">
+            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </Border>
+    </ControlTemplate>
+
+    <!--#endregion ControlTemplates-->
+
+</ResourceDictionary>

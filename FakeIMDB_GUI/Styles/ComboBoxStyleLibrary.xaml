@@ -1,0 +1,62 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ColorLibrary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Styling-->
+
+    <Style x:Key="MediaTypeComboBox" TargetType="{x:Type ComboBox}">
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="FontSize" Value="19" />
+        <Setter Property="Margin" Value="10,0,20,0" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template" Value="{DynamicResource Template.ComboBox}" />
+    </Style>
+
+    <!--#endregion Styling-->
+
+    <!--#region ControlTemplates-->
+
+    <ControlTemplate x:Key="Template.ComboBox" TargetType="{x:Type ComboBox}">
+        <DockPanel Background="{DynamicResource EnabledButtonColor}" LastChildFill="True">
+            <Border BorderThickness="0">
+                <Label MaxWidth="100"
+                       HorizontalAlignment="Left"
+                       VerticalAlignment="Stretch"
+                       Background="{DynamicResource DisabledButtonColor}"
+                       Content="{Binding Path=(extensions:TextBoxExtensions.TextBoxLabel),
+                                         RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                       DockPanel.Dock="Left"
+                       FontSize="20"
+                       />
+            </Border>
+            <ComboBox VerticalContentAlignment="Center"
+                      ItemsSource="{TemplateBinding ItemsSource}"
+                      SelectedItem="{TemplateBinding SelectedItem}"
+                      />
+        </DockPanel>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Template.InnerComboBox" TargetType="{x:Type ComboBox}">
+        <Grid>
+            <ToggleButton IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+            <ContentPresenter />
+            <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}">
+                <Grid>
+                    <Border>
+                        <ScrollViewer Background="Azure">
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </Popup>
+        </Grid>
+    </ControlTemplate>
+
+    <!--#endregion ControlTemplates-->
+
+</ResourceDictionary>

@@ -1,0 +1,33 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ColorLibrary.xaml" />
+        <ResourceDictionary Source="ScrollbarStyleLibrary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region ControlTemplates-->
+
+    <ControlTemplate x:Key="Template.ScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderThickness="0,1,1,1">
+                <ScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
+            </Border>
+            <ScrollBar x:Name="PART_VerticalScrollBar"
+                       Grid.Column="1"
+                       Maximum="{TemplateBinding ScrollableHeight}"
+                       Style="{DynamicResource Style.Scrollbar}"
+                       ViewportSize="{TemplateBinding ViewportHeight}"
+                       Value="{TemplateBinding VerticalOffset}"
+                       />
+        </Grid>
+    </ControlTemplate>
+
+    <!--#endregion ControlTemplates-->
+
+</ResourceDictionary>

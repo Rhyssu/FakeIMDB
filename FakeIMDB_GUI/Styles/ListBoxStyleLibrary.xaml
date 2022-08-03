@@ -1,0 +1,72 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ColorLibrary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Styling-->
+
+    <Style x:Key="ListBox" TargetType="{x:Type ListBox}">
+        <Setter Property="Template" Value="{DynamicResource Template.ListBox}" />
+        <Setter Property="ItemContainerStyle" Value="{DynamicResource Style.ListBoxItem}" />
+        <Setter Property="Width" Value="420" />
+        <Setter Property="ItemTemplate" Value="{DynamicResource DataTemplate.ListBox}" />
+    </Style>
+
+    <Style x:Key="Style.ListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Opacity" Value="0.75" />
+        <Setter Property="Background" Value="{DynamicResource BackgroundColor}" />
+        <Setter Property="Template" Value="{DynamicResource Template.ListBoxItem}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Trigger.Setters>
+                    <Setter Property="Opacity" Value="1.0" />
+                    <Setter Property="Background" Value="{DynamicResource DisabledButtonColor}" />
+                </Trigger.Setters>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Trigger.Setters>
+                    <Setter Property="Background" Value="{DynamicResource EnabledButtonColor}" />
+                    <Setter Property="FontWeight" Value="Bold" />
+                    <Setter Property="Opacity" Value="1.0" />
+                </Trigger.Setters>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--#endregion Styling-->
+
+    <!--#region ControlTemplates-->
+
+    <ControlTemplate x:Key="Template.ListBoxItem" TargetType="{x:Type ListBoxItem}">
+        <Border Background="{TemplateBinding Background}">
+            <ContentPresenter Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}" />
+        </Border>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Template.ListBox" TargetType="{x:Type ListBox}">
+        <ScrollViewer Template="{DynamicResource Template.ScrollViewer}">
+            <StackPanel IsItemsHost="True" />
+        </ScrollViewer>
+    </ControlTemplate>
+
+    <!--#endregion ControlTemplates-->
+
+    <!--#region DataTemplates-->
+
+    <DataTemplate x:Key="DataTemplate.ListBox" DataType="{x:Type SolidColorBrush}">
+        <DockPanel>
+            <Rectangle Height="20"
+                       Width="20"
+                       DockPanel.Dock="Left"
+                       Fill="{Binding .}"
+                       />
+            <Label Content="{Binding .}" DockPanel.Dock="Right" />
+        </DockPanel>
+    </DataTemplate>
+
+    <!--#endregion DataTemplates-->
+
+</ResourceDictionary>

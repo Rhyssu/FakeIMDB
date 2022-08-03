@@ -1,0 +1,67 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ColorLibrary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+
+    <!--#region Styling-->
+
+    <Style x:Key="TextBoxUpperPanel" TargetType="{x:Type TextBox}">
+        <Setter Property="Width" Value="150" />
+        <Setter Property="Height" Value="40" />
+        <Setter Property="Margin" Value="10,0,20,0" />
+        <Setter Property="Template" Value="{DynamicResource TextBoxTemplate}" />
+        <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+
+    <Style x:Key="TextBlockUpperPanel" TargetType="{x:Type TextBlock}">
+        <Setter Property="Width" Value="80" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="FontSize" Value="19" />
+    </Style>
+
+    <!--#endregion Styling-->
+
+    <!--#region Control Templates-->
+
+    <ControlTemplate x:Key="TextBoxTemplate" TargetType="{x:Type TextBox}">
+        <DockPanel Background="{DynamicResource TextBoxColor}" LastChildFill="True">
+            <Border x:Name="ErrorUnderline"
+                    Height="1"
+                    HorizontalAlignment="Stretch"
+                    Background="Red"
+                    DockPanel.Dock="Bottom"
+                    Visibility="Hidden"
+                    />
+            <Border Background="{DynamicResource DisabledButtonColor}" BorderThickness="0">
+                <TextBlock MaxWidth="100"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"
+                           DockPanel.Dock="Left"
+                           FontSize="20"
+                           Text="{Binding Path=(extensions:TextBoxExtensions.TextBoxLabel),
+                                          RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                           />
+            </Border>
+            <ScrollViewer x:Name="PART_ContentHost"
+                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                          DockPanel.Dock="Left"
+                          FontSize="25"
+                          Margin="10,0,0,0"
+                          />
+        </DockPanel>
+        <ControlTemplate.Triggers>
+            <DataTrigger Binding="{Binding Path=(Validation.HasError), RelativeSource={RelativeSource Mode=Self}}" Value="True">
+                <Setter TargetName="ErrorUnderline" Property="Visibility" Value="Visible" />
+            </DataTrigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <!--#endregion ControlTemplates-->
+
+</ResourceDictionary>
