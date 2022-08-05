@@ -1,20 +1,22 @@
-﻿using FakeIMDB_GUI.Commands;
+﻿using Application.Interfaces.Services;
+using Domain.Commons.Enums;
+using Domain.Entities;
+using FakeIMDB_GUI.Commands;
 using FakeIMDB_GUI.Enums;
 using FakeIMDB_GUI.Helpers;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows.Media;
-using System.Reflection;
 
 namespace FakeIMDB_GUI.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged, INotifyDataErrorInfo
     {
+        #region Variable Declaration
+
+        private readonly IMovieService movieService;
+
         public SearchTypes SearchState
         {
             get => GetBackingValue<SearchTypes>();
@@ -25,9 +27,15 @@ namespace FakeIMDB_GUI.ViewModels
             }
         }
 
-        public MediaTypes MediaType
+        public string PosterSource
         {
-            get => GetBackingValue<MediaTypes>();
+            get => GetBackingValue<string>();
+            set => SetBackingValue(value);
+        }
+
+        public TypeOptions MediaType
+        {
+            get => GetBackingValue<TypeOptions>();
             set => SetBackingValue(value);
         }
 
@@ -37,9 +45,17 @@ namespace FakeIMDB_GUI.ViewModels
             set => SetBackingValue(value);
         }
 
-        public ObservableCollection<SolidColorBrush> SolidColorBrushesList { get; } = new();
+        public MovieInfo MovieInfo
+        {
+            get => GetBackingValue<MovieInfo>();
+            set => SetBackingValue(value);
+        }
 
-        public MediaTypes[] AllMediaTypes { get; } = Enum.GetValues<MediaTypes>();
+        public MovieList MovieList
+        {
+            get => GetBackingValue<MovieList>();
+            set => SetBackingValue(value);
+        }
 
         public string Year
         {
@@ -62,40 +78,109 @@ namespace FakeIMDB_GUI.ViewModels
             set => SetBackingValue(value, TitleValidator);
         }
 
-        public MyCommand BySearchCommand { get; init; }
-        public MyCommand ByTitleCommand { get; init; }
-        public MyCommand ByIDCommand { get; init; }
-        public MyCommand SearchCommand { get; init; }
-        public MyCommand ResetCommand { get; init; }
+        public TypeOptions[] AllMediaTypes { get; } = Enum.GetValues<TypeOptions>();
 
-        public MainWindowViewModel()
+        public MyCommand BySearch { get; set; }
+        public MyCommand ByTitle { get; set; }
+        public MyCommand ByID { get; set; }
+        public MyCommand Search { get; set; }
+        public MyCommand Reset { get; set; }
+
+        #endregion Variable Declaration
+
+        public MainWindowViewModel(IMovieService movieService)
         {
-            ByIDCommand = new MyCommand(
+            this.movieService = movieService;
+            InitializeCommands();
+            Title = null;
+            Year = null;
+        }
+
+        #region Commands
+
+        private void InitializeCommands()
+        {
+            ByIDCommand();
+            ByTitleCommand();
+            BySearchCommand();
+            SearchCommand();
+            ResetCommand();
+        }
+
+        private void ByIDCommand()
+        {
+            ByID = new MyCommand(
                 (_) => SearchState = SearchTypes.ByID,
                 (_) => SearchState != SearchTypes.ByID);
-            ByTitleCommand = new MyCommand(
+        }
+
+        private void ByTitleCommand()
+        {
+            ByTitle = new MyCommand(
                 (_) => SearchState = SearchTypes.ByTitle,
                 (_) => SearchState != SearchTypes.ByTitle);
-            BySearchCommand = new MyCommand(
+        }
+
+        private void BySearchCommand()
+        {
+            BySearch = new MyCommand(
                 (_) => SearchState = SearchTypes.BySearch,
                 (_) => SearchState != SearchTypes.BySearch);
-            ResetCommand = new MyCommand(
+        }
+
+        private void SearchCommand()
+        {
+            Search = new MyCommand(
+                async (_) =>
+                {
+                    if (SearchState.ToString() == "ByID")
+                    {
+                        MovieInfo = await movieService.GetMovieByID(Title);
+                    }
+                    else if (SearchState.ToString() == "ByTitle")
+                    {
+                        MovieInfo = await movieService.GetMovieByTitle(Title, GetValidType(), GetValidYear());
+                    } 
+                    else if (SearchState.ToString() == "BySearch")
+                    {
+                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear());
+                    }
+                });
+        }
+
+        private void ResetCommand()
+        {
+            Reset = new MyCommand(
                 (_) =>
                 {
                     Title = null;
-                    Year  = null;
-                    MediaType = MediaTypes.All;
+                    Year = null;
+                    MediaType = TypeOptions.All;
                 }
                 );
-             Year  = null;
-             Title = null;
-
-            PropertyInfo[] colorBrushProperties = typeof(Colors).GetProperties(BindingFlags.Public | BindingFlags.Static);
-            foreach(PropertyInfo colorProperty in colorBrushProperties)
-            {
-                SolidColorBrushesList.Add(new SolidColorBrush((Color) colorProperty.GetValue(this, null)));
-            }
         }
+
+        private TypeOptions? GetValidType()
+        {
+            if (MediaType != TypeOptions.All)
+            {
+                return MediaType;
+            }
+            return null;
+        }
+
+        private int? GetValidYear()
+        {
+            if (int.TryParse(Year, out int YearInt))
+            {
+                return YearInt;
+            }
+            return null;
+        }
+
+        #endregion Commands
+
+        #region Validation
 
         public static IEnumerable<string> TitleValidator<TProperty>(TProperty value)
         {
@@ -115,5 +200,7 @@ namespace FakeIMDB_GUI.ViewModels
                 }
             }
         }
+
+        #endregion Validation
     }
 }

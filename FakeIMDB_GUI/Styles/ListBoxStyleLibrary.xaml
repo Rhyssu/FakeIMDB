@@ -58,11 +58,6 @@
 
     <DataTemplate x:Key="DataTemplate.ListBox" DataType="{x:Type SolidColorBrush}">
         <DockPanel>
-            <Rectangle Height="20"
-                       Width="20"
-                       DockPanel.Dock="Left"
-                       Fill="{Binding .}"
-                       />
             <Label Content="{Binding .}" DockPanel.Dock="Right" />
         </DockPanel>
     </DataTemplate>

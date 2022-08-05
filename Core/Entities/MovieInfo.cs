@@ -38,30 +38,30 @@ namespace Domain.Entities
         public override string ToString()
         {
             StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Title        : {Title}");
-            stringBuilder.AppendLine($"Year         : {Year}");
-            stringBuilder.AppendLine($"Rated        : {Rated}");
-            stringBuilder.AppendLine($"Released     : {Released}");
-            stringBuilder.AppendLine($"Runtime      : {Runtime}");
-            stringBuilder.AppendLine($"Genre        : {Genre}");
-            stringBuilder.AppendLine($"Director     : {Director}");
-            stringBuilder.AppendLine($"Writer       : {Writer}");
-            stringBuilder.AppendLine($"Actors       : {Actors}");
-            stringBuilder.AppendLine($"Plot         : {Plot}");
-            stringBuilder.AppendLine($"Language     : {Language}");
-            stringBuilder.AppendLine($"Country      : {Country}");
-            stringBuilder.AppendLine($"Awards       : {Awards}");
-            stringBuilder.AppendLine($"Poster       : {Poster}");
-            stringBuilder.AppendLine($"Metascore    : {Metascore}");
-            stringBuilder.AppendLine($"imdbRating   : {imdbRating}");
-            stringBuilder.AppendLine($"imdbVotes    : {imdbVotes}");
-            stringBuilder.AppendLine($"imdbID       : {imdbID}");
-            stringBuilder.AppendLine($"Type         : {Type}");
-            stringBuilder.AppendLine($"DVD          : {DVD}");
-            stringBuilder.AppendLine($"BoxOffice    : {BoxOffice}");
-            stringBuilder.AppendLine($"Production   : {Production}");
-            stringBuilder.AppendLine($"Website      : {Website}");
-            stringBuilder.AppendLine($"Response     : {Response}");
+            stringBuilder.AppendLine($"Title : {Title}");
+            stringBuilder.AppendLine($"Year : {Year}");
+            stringBuilder.AppendLine($"Rated : {Rated}");
+            stringBuilder.AppendLine($"Released : {Released}");
+            stringBuilder.AppendLine($"Runtime : {Runtime}");
+            stringBuilder.AppendLine($"Genre : {Genre}");
+            stringBuilder.AppendLine($"Director : {Director}");
+            stringBuilder.AppendLine($"Writer : {Writer}");
+            stringBuilder.AppendLine($"Actors : {Actors}");
+            stringBuilder.AppendLine($"Plot : {Plot}");
+            stringBuilder.AppendLine($"Language : {Language}");
+            stringBuilder.AppendLine($"Country : {Country}");
+            stringBuilder.AppendLine($"Awards : {Awards}");
+            stringBuilder.AppendLine($"Poster : {Poster}");
+            stringBuilder.AppendLine($"Metascore : {Metascore}");
+            stringBuilder.AppendLine($"imdbRating : {imdbRating}");
+            stringBuilder.AppendLine($"imdbVotes : {imdbVotes}");
+            stringBuilder.AppendLine($"imdbID : {imdbID}");
+            stringBuilder.AppendLine($"Type : {Type}");
+            stringBuilder.AppendLine($"DVD : {DVD}");
+            stringBuilder.AppendLine($"BoxOffice : {BoxOffice}");
+            stringBuilder.AppendLine($"Production : {Production}");
+            stringBuilder.AppendLine($"Website : {Website}");
+            stringBuilder.AppendLine($"Response : {Response}");
             return stringBuilder.ToString();
         }
     }

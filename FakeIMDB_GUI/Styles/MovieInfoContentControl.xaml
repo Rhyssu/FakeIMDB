@@ -1,0 +1,226 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:FakeIMDB_GUI.Converters"
+                    xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain"
+                    >
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="ColorLibrary.xaml" />
+        <ResourceDictionary Source="ImageStyleLibrary.xaml" />
+        <ResourceDictionary Source="ListBoxStyleLibrary.xaml" />
+        <ResourceDictionary Source="ButtonStyleLibrary.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+    <converters:StringToSourceConverter x:Key="Private.StringToSourceConverter" />
+    <converters:MovieInfoDockPanelConverter x:Key="Private.MovieInfoDockPanelConverter" />
+
+    <!--#region Styling-->
+
+    <Style x:Key="Style.Divider" TargetType="{x:Type Rectangle}">
+        <Setter Property="Height" Value="1" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Fill" Value="Gray" />
+        <Setter Property="Margin" Value="12,15,12,0" />
+        <Setter Property="Opacity" Value="0.5" />
+    </Style>
+
+    <Style x:Key="Style.TitleStyling" TargetType="{x:Type TextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="FontFamily" Value="Eurostile" />
+        <Setter Property="FontSize" Value="40" />
+        <Setter Property="Margin" Value="10,10,0,0" />
+        <Setter Property="FontWeight" Value="Bold" />
+    </Style>
+
+    <Style x:Key="Style.MoviePlot" TargetType="{x:Type Label}">
+        <Setter Property="FontFamily" Value="Arial" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="FontStretch" Value="Expanded" />
+        <Setter Property="FontWeight" Value="Regular" />
+        <Setter Property="Margin" Value="8,10,0,0" />
+    </Style>
+
+    <Style x:Key="Style.ShortInfoPanel" TargetType="{x:Type StackPanel}">
+        <Setter Property="TextBlock.FontSize" Value="15" />
+        <Setter Property="TextBlock.FontFamily" Value="Arial" />
+        <Setter Property="TextBlock.FontStretch" Value="Expanded" />
+        <Setter Property="Opacity" Value="0.5" />
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="Margin" Value="6,0,0,0" />
+    </Style>
+
+    <Style x:Key="Style.CastInfo" TargetType="{x:Type StackPanel}">
+        <Setter Property="Orientation" Value="Horizontal" />
+        <Setter Property="TextBlock.FontFamily" Value="Arial" />
+        <Setter Property="TextBlock.FontSize" Value="15" />
+        <Setter Property="Margin" Value="7,10,0,0" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource EnabledButtonColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--#endregion Styling-->
+
+    <!--#region DataTemplates-->
+
+    <DataTemplate x:Key="DataTemplate.MovieInfo" DataType="{x:Type entities:MovieInfo}">
+        <Grid>
+            <Border>
+                <DockPanel LastChildFill="True" Visibility="{Binding Title, Converter={StaticResource Private.MovieInfoDockPanelConverter}, FallbackValue=Collapsed}">
+                    <ScrollViewer DockPanel.Dock="Right" Template="{DynamicResource Template.EmptyScrollView}">
+                        <Grid x:Name="MovieInfoGrid"
+                              Width="420"
+                              Margin="20"
+                              >
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="Title" Height="Auto" />
+                                <RowDefinition x:Name="ShortInfoPanel"
+                                               Height="Auto"
+                                               MinHeight="13"
+                                               MaxHeight="20"
+                                               />
+                                <RowDefinition x:Name="Divider1"
+                                               Height="Auto"
+                                               MinHeight="10"
+                                               MaxHeight="20"
+                                               />
+                                <RowDefinition x:Name="MoviePlot" Height="Auto" />
+                                <RowDefinition x:Name="Divider2"
+                                               Height="Auto"
+                                               MinHeight="10"
+                                               MaxHeight="20"
+                                               />
+                                <RowDefinition x:Name="WrittenBy" Height="Auto" />
+                                <RowDefinition x:Name="DirectedBy" Height="Auto" />
+                                <RowDefinition x:Name="Starring" Height="Auto" />
+                                <RowDefinition x:Name="Rating" Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!--  Title  -->
+                            <Border Grid.Row="0">
+                                <TextBlock Style="{DynamicResource Style.TitleStyling}"
+                                           Text="{Binding Title}"
+                                           TextWrapping="WrapWithOverflow"
+                                           />
+                            </Border>
+
+                            <!--  Short Info Stackpanel  -->
+                            <Border Grid.Row="1">
+                                <StackPanel Style="{DynamicResource Style.ShortInfoPanel}">
+                                    <Label Content="{Binding Rated}" />
+                                    <Label Content="{Binding Year}" />
+                                    <Label Content="{Binding Genre}" />
+                                </StackPanel>
+                            </Border>
+
+                            <!--  Divider  -->
+                            <Border Grid.Row="2">
+                                <Rectangle Style="{DynamicResource Style.Divider}" />
+                            </Border>
+
+                            <!--  Movie Plot Short  -->
+                            <Border Grid.Row="3">
+                                <Label Style="{DynamicResource Style.MoviePlot}">
+                                    <TextBlock Text="{Binding Plot}" TextWrapping="WrapWithOverflow" />
+                                </Label>
+                            </Border>
+
+                            <!--  Divider  -->
+                            <Border Grid.Row="4">
+                                <Rectangle Style="{DynamicResource Style.Divider}" />
+                            </Border>
+
+                            <!--  Written by  -->
+                            <Border Grid.Row="5">
+                                <StackPanel Style="{DynamicResource Style.CastInfo}">
+                                    <Label Content="Written by: " FontWeight="Bold" />
+                                    <Label>
+                                        <TextBlock Text="{Binding Writer}" TextWrapping="WrapWithOverflow" />
+                                    </Label>
+                                </StackPanel>
+                            </Border>
+
+                            <!--  Directed by  -->
+                            <Border Grid.Row="6">
+                                <StackPanel Style="{DynamicResource Style.CastInfo}">
+                                    <Label Content="Directed by: " FontWeight="Bold" />
+                                    <Label>
+                                        <TextBlock Text="{Binding Director}" TextWrapping="WrapWithOverflow" />
+                                    </Label>
+                                </StackPanel>
+                            </Border>
+
+                            <!--  Starring  -->
+                            <Border Grid.Row="7">
+                                <StackPanel Style="{DynamicResource Style.CastInfo}">
+                                    <Label Content="Starring:  " FontWeight="Bold" />
+                                    <Label>
+                                        <TextBlock Text="{Binding Actors}" TextWrapping="WrapWithOverflow" />
+                                    </Label>
+                                </StackPanel>
+                            </Border>
+
+                            <!--  Rating  -->
+                            <Border Grid.Row="8">
+                                <StackPanel Style="{DynamicResource Style.CastInfo}">
+                                    <Label Content="IMDB Rating: " FontWeight="Bold" />
+                                    <Label Content="{Binding imdbRating}" />
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </ScrollViewer>
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding Poster,
+                                            Converter={StaticResource Private.StringToSourceConverter}}"
+                           Style="{DynamicResource PosterImageBig}"
+                           />
+                </DockPanel>
+            </Border>
+        </Grid>
+    </DataTemplate>
+
+    <ControlTemplate x:Key="Template.EmptyScrollView" TargetType="{x:Type ScrollViewer}">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Border Grid.Column="0" BorderThickness="0,1,1,1">
+                <ScrollContentPresenter CanContentScroll="{TemplateBinding CanContentScroll}" />
+            </Border>
+            <ScrollBar x:Name="PART_VerticalScrollBar"
+                       Grid.Column="1"
+                       Maximum="{TemplateBinding ScrollableHeight}"
+                       ViewportSize="{TemplateBinding ViewportHeight}"
+                       Visibility="Collapsed"
+                       Value="{TemplateBinding VerticalOffset}"
+                       />
+        </Grid>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="Template.FullMovieInfoView" TargetType="{x:Type ToggleButton}">
+        <Border Background="{TemplateBinding Background}">
+            <ContentPresenter HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              />
+        </Border>
+    </ControlTemplate>
+
+    <Style x:Key="PrivateButtonStyleBase" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Template" Value="{DynamicResource Template.FullMovieInfoView}" />
+        <Setter Property="Background" Value="{DynamicResource EnabledButtonColor}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{DynamicResource OnHoverButtonColor}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{DynamicResource DisabledButtonColor}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!--#endregion DataTemplates-->
+
+</ResourceDictionary>

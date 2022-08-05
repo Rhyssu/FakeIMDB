@@ -8,6 +8,6 @@ namespace Domain.Commons.Enums
 {
     public enum TypeOptions
     {
-        Movie, Series, Episode
+        All, Movie, Series, Episode
     }
 }

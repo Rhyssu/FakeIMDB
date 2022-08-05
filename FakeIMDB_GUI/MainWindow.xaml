@@ -7,19 +7,20 @@
         xmlns:converters="clr-namespace:FakeIMDB_GUI.Converters"
         xmlns:enums="clr-namespace:FakeIMDB_GUI.Enums"
         xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+        xmlns:helpers="clr-namespace:FakeIMDB_GUI.Helpers"
         xmlns:local="clr-namespace:FakeIMDB_GUI"
-        xmlns:viewmodels="clr-namespace:FakeIMDB_GUI.ViewModels"
+        xmlns:vms="clr-namespace:FakeIMDB_GUI.ViewModels"
         mc:Ignorable="d"
         Title="FakeIMDB"
+        d:DataContext="{d:DesignInstance Type=vms:MainWindowViewModel,
+                                         IsDesignTimeCreatable=False}"
         Height="600"
         Width="800"
         MinHeight="690"
         MinWidth="800"
         Background="{DynamicResource BackgroundColor}"
+        DataContext="{helpers:DIResolver Type=vms:MainWindowViewModel}"
         >
-    <Window.DataContext>
-        <viewmodels:MainWindowViewModel />
-    </Window.DataContext>
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -31,10 +32,15 @@
                 <ResourceDictionary Source="Styles/TextBoxStyleLibrary.xaml" />
                 <ResourceDictionary Source="Styles/ImageStyleLibrary.xaml" />
                 <ResourceDictionary Source="Styles/ColorLibrary.xaml" />
+                <ResourceDictionary Source="Styles/MovieInfoContentControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:TabVisibilityConverter x:Key="Private.TabVisibilityConverter" />
             <converters:AndConverter x:Key="Private.AndConverter" />
             <converters:BooleanInverseConverter x:Key="Private.BooleanInverseConverter" />
+            <converters:MovieInfoVisibilityConverter x:Key="Private.MovieInfoVisibilityConverter" />
+            <converters:DisableInputConverter x:Key="Private.DisableInputConverter" />
+            <converters:MovieListVisibilityConverter x:Key="Private.MovieListVisibilityConverter" />
+            <converters:StringToSourceConverter x:Key="Private.StringToSourceConverter" />
         </ResourceDictionary>
     </Window.Resources>
     <Grid ShowGridLines="True">
@@ -52,17 +58,17 @@
                     Orientation="Horizontal"
                     >
             <Button Name="ByIDButton"
-                    Command="{Binding Path=ByIDCommand}"
+                    Command="{Binding Path=ByID}"
                     Content="Find By ID"
                     Style="{DynamicResource PrivateButtonStyleBig}"
                     />
             <Button Name="ByTitleButton"
-                    Command="{Binding Path=ByTitleCommand}"
+                    Command="{Binding Path=ByTitle}"
                     Content="Find By Title"
                     Style="{DynamicResource PrivateButtonStyleBig}"
                     />
             <Button Name="BySearchButton"
-                    Command="{Binding Path=BySearchCommand}"
+                    Command="{Binding Path=BySearch}"
                     Content="By Search"
                     Style="{DynamicResource PrivateButtonStyleBig}"
                     />
@@ -84,6 +90,8 @@
                 </TextBox.Text>
             </TextBox>
             <TextBox Name="YearTextBox"
+                     IsEnabled="{Binding SearchState,
+                                         Converter={StaticResource Private.DisableInputConverter}}"
                      Style="{DynamicResource TextBoxUpperPanel}"
                      extensions:TextBoxExtensions.TextBoxLabel="Year:"
                      >
@@ -92,14 +100,15 @@
                 </TextBox.Text>
             </TextBox>
             <ComboBox Name="MediaTypeComboBox"
+                      IsEnabled="{Binding SearchState,
+                                          Converter={StaticResource Private.DisableInputConverter}}"
                       ItemsSource="{Binding AllMediaTypes}"
-                      SelectedIndex="0"
                       SelectedItem="{Binding MediaType}"
                       Style="{DynamicResource MediaTypeComboBox}"
                       extensions:TextBoxExtensions.TextBoxLabel="Type: "
                       />
             <Button Name="SearchButton"
-                    Command="{Binding SearchCommand}"
+                    Command="{Binding Search}"
                     Content="Search"
                     Style="{DynamicResource PrivateButtonStyleSmall}"
                     >
@@ -117,7 +126,7 @@
                 </Button.IsEnabled>
             </Button>
             <Button Name="ResetButton"
-                    Command="{Binding ResetCommand}"
+                    Command="{Binding Reset}"
                     Content="Reset"
                     Style="{DynamicResource PrivateButtonStyleSmall}"
                     />
@@ -125,15 +134,25 @@
 
         <!--  Pierwszy widok  -->
 
+        <ContentControl Grid.Row="2"
+                        Content="{Binding MovieInfo}"
+                        ContentTemplate="{DynamicResource DataTemplate.MovieInfo}"
+                        Margin="13"
+                        Visibility="{Binding SearchState,
+                                             Converter={StaticResource Private.MovieInfoVisibilityConverter}}"
+                        />
+
+        <!--  Drugi widok  -->
+
         <StackPanel Grid.Row="2"
                     Margin="13"
                     Orientation="Horizontal"
+                    Visibility="{Binding SearchState,
+                                         Converter={StaticResource Private.MovieListVisibilityConverter}}"
                     >
-            <ListBox ItemsSource="{Binding SolidColorBrushesList}" Style="{DynamicResource ListBox}" />
-            <Image Source="https://m.media-amazon.com/images/M/MV5BOGZhM2FhNTItODAzNi00YjA0LWEyN2UtNjJlYWQzYzU1MDg5L2ltYWdlL2ltYWdlXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_SX300.jpg" Style="{DynamicResource PosterImageBig}" />
+            <ListBox ItemsSource="{Binding MovieList}" Style="{DynamicResource ListBox}" />
+            <Image Source="{Binding PosterSource, Converter={StaticResource Private.StringToSourceConverter}}" Style="{DynamicResource PosterImageBig}" />
         </StackPanel>
-
-        <!--  Drugi widok  -->
 
     </Grid>
 </Window>

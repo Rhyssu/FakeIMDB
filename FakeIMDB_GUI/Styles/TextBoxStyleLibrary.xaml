@@ -16,6 +16,11 @@
         <Setter Property="Validation.ErrorTemplate" Value="{x:Null}" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        <Style.Triggers>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Opacity" Value="0.5" />
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="TextBlockUpperPanel" TargetType="{x:Type TextBlock}">
@@ -37,7 +42,10 @@
                     DockPanel.Dock="Bottom"
                     Visibility="Hidden"
                     />
-            <Border Background="{DynamicResource DisabledButtonColor}" BorderThickness="0">
+            <Border x:Name="TextBoxBorder"
+                    Background="{DynamicResource DisabledButtonColor}"
+                    BorderThickness="0"
+                    >
                 <TextBlock MaxWidth="100"
                            HorizontalAlignment="Left"
                            VerticalAlignment="Center"

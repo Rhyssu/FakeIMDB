@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using Application.Interfaces.Services;
+using FakeIMDB_GUI.ViewModels;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
