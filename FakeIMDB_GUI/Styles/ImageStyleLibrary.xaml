@@ -7,7 +7,7 @@
     <Style x:Key="PosterImageBig" TargetType="{x:Type Image}">
         <Setter Property="Width" Value="300" />
         <Setter Property="Height" Value="400" />
-        <Setter Property="Margin" Value="25,0,0,0" />
+        <Setter Property="Margin" Value="20,0,0,0" />
     </Style>
 
     <!--#endregion Styling-->

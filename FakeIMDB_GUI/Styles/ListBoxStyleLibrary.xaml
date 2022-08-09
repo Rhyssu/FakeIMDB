@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
+                    xmlns:s="clr-namespace:System;assembly=mscorlib"
                     >
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ColorLibrary.xaml" />
@@ -12,7 +13,6 @@
         <Setter Property="Template" Value="{DynamicResource Template.ListBox}" />
         <Setter Property="ItemContainerStyle" Value="{DynamicResource Style.ListBoxItem}" />
         <Setter Property="Width" Value="420" />
-        <Setter Property="ItemTemplate" Value="{DynamicResource DataTemplate.ListBox}" />
     </Style>
 
     <Style x:Key="Style.ListBoxItem" TargetType="ListBoxItem">
@@ -53,15 +53,5 @@
     </ControlTemplate>
 
     <!--#endregion ControlTemplates-->
-
-    <!--#region DataTemplates-->
-
-    <DataTemplate x:Key="DataTemplate.ListBox" DataType="{x:Type SolidColorBrush}">
-        <DockPanel>
-            <Label Content="{Binding .}" DockPanel.Dock="Right" />
-        </DockPanel>
-    </DataTemplate>
-
-    <!--#endregion DataTemplates-->
 
 </ResourceDictionary>

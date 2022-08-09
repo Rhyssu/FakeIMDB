@@ -6,77 +6,40 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class MovieInfo
+    public record MovieInfo
     {
-        public string Title { get; set; }
-        public string Year { get; set; }
-        public string Rated { get; set; }
-        public string Released { get; set; }
-        public string Runtime { get; set; }
-        public string Genre { get; set; }
-        public string Director { get; set; }
-        public string Writer { get; set; }
-        public string Actors { get; set; }
-        public string Plot { get; set; }
-        public string Language { get; set; }
-        public string Country { get; set; }
-        public string Awards { get; set; }
-        public string Poster { get; set; }
-        public List<Rating> Ratings { get; set; }
-        public string Metascore { get; set; }
-        public string imdbRating { get; set; }
-        public string imdbVotes { get; set; }
-        public string imdbID { get; set; }
-        public string Type { get; set; }
-        public string DVD { get; set; }
-        public string BoxOffice { get; set; }
-        public string Production { get; set; }
-        public string Website { get; set; }
-        public string Response { get; set; }
+        public string Title { get; init; }
+        public string Year { get; init; }
+        public string Rated { get; init; }
+        public string Released { get; init; }
+        public string Runtime { get; init; }
+        public string Genre { get; init; }
+        public string Director { get; init; }
+        public string Writer { get; init; }
+        public string Actors { get; init; }
+        public string Plot { get; init; }
+        public string Language { get; init; }
+        public string Country { get; init; }
+        public string Awards { get; init; }
+        public string Poster { get; init; }
+        public virtual List<Rating> Ratings { get; init; }
+        public string Metascore { get; init; }
+        public string imdbRating { get; init; }
+        public string imdbVotes { get; init; }
+        public string imdbID { get; init; }
+        public string Type { get; init; }
+        public string DVD { get; init; }
+        public string BoxOffice { get; init; }
+        public string Production { get; init; }
+        public string Website { get; init; }
+        public string Response { get; init; }
         public Guid ID { get; } = Guid.NewGuid();
-
-        public override string ToString()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Title : {Title}");
-            stringBuilder.AppendLine($"Year : {Year}");
-            stringBuilder.AppendLine($"Rated : {Rated}");
-            stringBuilder.AppendLine($"Released : {Released}");
-            stringBuilder.AppendLine($"Runtime : {Runtime}");
-            stringBuilder.AppendLine($"Genre : {Genre}");
-            stringBuilder.AppendLine($"Director : {Director}");
-            stringBuilder.AppendLine($"Writer : {Writer}");
-            stringBuilder.AppendLine($"Actors : {Actors}");
-            stringBuilder.AppendLine($"Plot : {Plot}");
-            stringBuilder.AppendLine($"Language : {Language}");
-            stringBuilder.AppendLine($"Country : {Country}");
-            stringBuilder.AppendLine($"Awards : {Awards}");
-            stringBuilder.AppendLine($"Poster : {Poster}");
-            stringBuilder.AppendLine($"Metascore : {Metascore}");
-            stringBuilder.AppendLine($"imdbRating : {imdbRating}");
-            stringBuilder.AppendLine($"imdbVotes : {imdbVotes}");
-            stringBuilder.AppendLine($"imdbID : {imdbID}");
-            stringBuilder.AppendLine($"Type : {Type}");
-            stringBuilder.AppendLine($"DVD : {DVD}");
-            stringBuilder.AppendLine($"BoxOffice : {BoxOffice}");
-            stringBuilder.AppendLine($"Production : {Production}");
-            stringBuilder.AppendLine($"Website : {Website}");
-            stringBuilder.AppendLine($"Response : {Response}");
-            return stringBuilder.ToString();
-        }
     }
 
-    public class Rating
+    public record Rating
     {
         public Guid ID { get; } = Guid.NewGuid();
-        public string Source { get; set; }
-        public string Value { get; set; }
-        public override string ToString()
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Source       : {Source}");
-            stringBuilder.AppendLine($"value        : {Value}");
-            return stringBuilder.ToString();
-        }
+        public string Source { get; init; }
+        public string Value { get; init; }
     }
 }

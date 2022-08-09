@@ -25,6 +25,7 @@ namespace Infrastructure.Repositories
 
         public IQueryable<MovieListCache> GetAllMoviesLists()
             => context.MovieListCaches.Include(x => x.MovieList);
+        public IQueryable<MovieShortInfo> GetMovieShorts() => context.MovieShortInfos;
 
         public async Task AddMovieToDatabaseAsync(MovieInfoCache movie, CancellationToken cancellationToken = default)
         {

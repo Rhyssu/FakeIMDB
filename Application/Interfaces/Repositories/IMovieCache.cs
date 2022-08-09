@@ -12,6 +12,7 @@ namespace Application.Interfaces.Repositories
     {
         IQueryable<MovieInfoCache> GetAllMovies();
         IQueryable<MovieListCache> GetAllMoviesLists();
+        IQueryable<MovieShortInfo> GetMovieShorts();
         Task AddMovieToDatabaseAsync (MovieInfoCache movie, CancellationToken cancellationToken = default);
         Task AddMovieListToDatabaseAsync (MovieListCache movieList, CancellationToken cancellationToken = default);
         

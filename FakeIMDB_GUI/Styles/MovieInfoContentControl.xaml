@@ -3,6 +3,8 @@
                     xmlns:converters="clr-namespace:FakeIMDB_GUI.Converters"
                     xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain"
                     >
+    <!--#region Resources-->
+
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="ColorLibrary.xaml" />
         <ResourceDictionary Source="ImageStyleLibrary.xaml" />
@@ -11,6 +13,8 @@
     </ResourceDictionary.MergedDictionaries>
     <converters:StringToSourceConverter x:Key="Private.StringToSourceConverter" />
     <converters:MovieInfoDockPanelConverter x:Key="Private.MovieInfoDockPanelConverter" />
+
+    <!--#endregion Resources-->
 
     <!--#region Styling-->
 
@@ -65,7 +69,7 @@
 
     <DataTemplate x:Key="DataTemplate.MovieInfo" DataType="{x:Type entities:MovieInfo}">
         <Grid>
-            <Border>
+            <Border Visibility="Visible">
                 <DockPanel LastChildFill="True" Visibility="{Binding Title, Converter={StaticResource Private.MovieInfoDockPanelConverter}, FallbackValue=Collapsed}">
                     <ScrollViewer DockPanel.Dock="Right" Template="{DynamicResource Template.EmptyScrollView}">
                         <Grid x:Name="MovieInfoGrid"
@@ -176,6 +180,16 @@
                            />
                 </DockPanel>
             </Border>
+            <Border Visibility="Collapsed">
+                <DockPanel>
+                    <Image DockPanel.Dock="Left"
+                           Source="{Binding Poster,
+                                            Converter={StaticResource Private.StringToSourceConverter}}"
+                           Style="{DynamicResource PosterImageBig}"
+                           />
+                    <ScrollViewer DockPanel.Dock="Right" Template="{DynamicResource Template.EmptyScrollView}" />
+                </DockPanel>
+            </Border>
         </Grid>
     </DataTemplate>
 
@@ -197,29 +211,6 @@
                        />
         </Grid>
     </ControlTemplate>
-
-    <ControlTemplate x:Key="Template.FullMovieInfoView" TargetType="{x:Type ToggleButton}">
-        <Border Background="{TemplateBinding Background}">
-            <ContentPresenter HorizontalAlignment="Center"
-                              VerticalAlignment="Center"
-                              Content="{TemplateBinding Content}"
-                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                              />
-        </Border>
-    </ControlTemplate>
-
-    <Style x:Key="PrivateButtonStyleBase" TargetType="{x:Type ToggleButton}">
-        <Setter Property="Template" Value="{DynamicResource Template.FullMovieInfoView}" />
-        <Setter Property="Background" Value="{DynamicResource EnabledButtonColor}" />
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{DynamicResource OnHoverButtonColor}" />
-            </Trigger>
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="{DynamicResource DisabledButtonColor}" />
-            </Trigger>
-        </Style.Triggers>
-    </Style>
 
     <!--#endregion DataTemplates-->
 

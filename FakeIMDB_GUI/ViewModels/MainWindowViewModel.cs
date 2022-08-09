@@ -6,6 +6,7 @@ using FakeIMDB_GUI.Enums;
 using FakeIMDB_GUI.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Text.RegularExpressions;
 
@@ -25,6 +26,12 @@ namespace FakeIMDB_GUI.ViewModels
                 SetBackingValue(value);
                 RaisePropertyChanged(nameof(SearchOptionLabel));
             }
+        }
+
+        public int CurrentPage
+        {
+            get => GetBackingValue<int>();
+            set => SetBackingValue(value);
         }
 
         public string PosterSource
@@ -51,6 +58,12 @@ namespace FakeIMDB_GUI.ViewModels
             set => SetBackingValue(value);
         }
 
+        public MovieShortInfo SelectedMovieInfo
+        {
+            get => GetBackingValue<MovieShortInfo>();
+            set => SetBackingValue(value);
+        }
+
         public MovieList MovieList
         {
             get => GetBackingValue<MovieList>();
@@ -61,6 +74,12 @@ namespace FakeIMDB_GUI.ViewModels
         {
             get => GetBackingValue<string>();
             set => SetBackingValue(value, YearValidator);
+        }
+
+        public ObservableCollection<MovieShortInfo> ShortMovieInfo
+        {
+            get => GetBackingValue<ObservableCollection<MovieShortInfo>>();
+            set => SetBackingValue(value);
         }
 
         public string SearchOptionLabel =>
@@ -85,6 +104,8 @@ namespace FakeIMDB_GUI.ViewModels
         public MyCommand ByID { get; set; }
         public MyCommand Search { get; set; }
         public MyCommand Reset { get; set; }
+        public MyCommand PreviousPage { get; set; }
+        public MyCommand NextPage { get; set; }
 
         #endregion Variable Declaration
 
@@ -94,6 +115,7 @@ namespace FakeIMDB_GUI.ViewModels
             InitializeCommands();
             Title = null;
             Year = null;
+            CurrentPage = 1;
         }
 
         #region Commands
@@ -105,6 +127,8 @@ namespace FakeIMDB_GUI.ViewModels
             BySearchCommand();
             SearchCommand();
             ResetCommand();
+            NextPageCommand();
+            PreviousPageCommand();
         }
 
         private void ByIDCommand()
@@ -143,7 +167,43 @@ namespace FakeIMDB_GUI.ViewModels
                     } 
                     else if (SearchState.ToString() == "BySearch")
                     {
-                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear());
+                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), CurrentPage);
+                        if (MovieList != null)
+                        {
+                            CurrentPage = 1;
+                            ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
+                        }
+                    }
+                });
+        }
+
+        private void NextPageCommand()
+        {
+            NextPage = new MyCommand(
+                async (_) =>
+                {
+                    var tempCurrentPage = CurrentPage + 1;
+                    MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), tempCurrentPage);
+                    if (MovieList != null)
+                    {
+                        CurrentPage = tempCurrentPage;
+                        ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
+                    }
+                });
+        }
+
+        private void PreviousPageCommand()
+        {
+            PreviousPage = new MyCommand(
+                async (_) =>
+                {
+                    if (CurrentPage > 1)
+                    {
+                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), --CurrentPage);
+                        if (MovieList != null)
+                        {
+                            ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
+                        }
                     }
                 });
         }

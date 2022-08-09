@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 { 
-    public class ErrorResponse
+    public record ErrorResponse
     {
-        public string Response { get; set; }
-        public string Error { get; set; }
+        public string Response { get; init; }
+        public string Error { get; init; }
 
         public override string ToString()
         {

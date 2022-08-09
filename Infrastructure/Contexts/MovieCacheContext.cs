@@ -11,6 +11,9 @@ namespace Infrastructure.Contexts
         public DatabaseSettings config { get; set; }
         public DbSet<MovieInfoCache> MovieInfoCaches { get; set; }
         public DbSet<MovieListCache> MovieListCaches { get; set; }
+
+        public DbSet<MovieShortInfo> MovieShortInfos { get; set; }
+
         public MovieCacheContext(IOptions<DatabaseSettings> options)
         {
             config = options.Value;
@@ -38,11 +41,11 @@ namespace Infrastructure.Contexts
                 .HasKey(x => x.ID);
             modelBuilder.Entity<MovieInfoCache>()
                 .HasKey(x => x.ID);
+            modelBuilder.Entity<MovieListCache>()
+                .HasKey(x => x.ID);
             modelBuilder.Entity<MovieShortInfo>()
                 .HasKey(x => x.ID);
             modelBuilder.Entity<MovieList>()
-                .HasKey(x => x.ID);
-            modelBuilder.Entity<MovieListCache>()
                 .HasKey(x => x.ID);
         }
     }

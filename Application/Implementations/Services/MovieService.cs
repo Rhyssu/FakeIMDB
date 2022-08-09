@@ -99,31 +99,33 @@ namespace Application.Implementations.Services
             int? page = null,
             CancellationToken cancellationToken = default)
         {
-            var allMovies = movieCache.GetAllMoviesLists()
+            var query = movieCache.GetAllMoviesLists()
                 .Where(x => x.QueryTitle == title)
                 .Where(x => x.MediaType == type)
                 .Where(x => x.Year == year)
+                .Where(x => x.Page == page)
                 .Where(x => DateTime.Now <= x.CreationDate.AddDays(1))
                 .FirstOrDefault();
 
-            if (allMovies != null)
+            if (query != null)
             {
-                serviceLogger.LogDebug("Znaleziono wpis w pamieci cache!");
-                if (allMovies.MovieList != null)
+                if (query.MovieList != null)
                 {
-                    return allMovies.MovieList;
+                    serviceLogger.LogDebug("Znaleziono wpis w pamieci cache!");
+                    var allMovies = movieCache.GetMovieShorts()
+                        .Where(x => x.MovieListID == query.MovieList.ID).ToList();
+                    return new MovieList(allMovies);
                 }
                 else
                 {
-                    serviceLogger.LogDebug("Nie znaleziono informacji o liscie filmow!");
-                    return allMovies.MovieList;
+                    return null;
                 }
             }
             else
             {
                 serviceLogger.LogDebug("Nie znaleziono informacji o filmie w pamieci cache, pobieram z API...");
                 MovieList newList = await movieRepository.GetMovieListByTitle(title, type, year, page);
-                MovieListCache newMoveListCache = new(newList, title, type, year);
+                MovieListCache newMoveListCache = new(newList, title, (int)page, type, year);
                 await movieCache.AddMovieListToDatabaseAsync(newMoveListCache, cancellationToken);
                 return newList;
             }

@@ -21,6 +21,9 @@
         Background="{DynamicResource BackgroundColor}"
         DataContext="{helpers:DIResolver Type=vms:MainWindowViewModel}"
         >
+
+    <!--#region Resources-->
+
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -33,6 +36,7 @@
                 <ResourceDictionary Source="Styles/ImageStyleLibrary.xaml" />
                 <ResourceDictionary Source="Styles/ColorLibrary.xaml" />
                 <ResourceDictionary Source="Styles/MovieInfoContentControl.xaml" />
+                <ResourceDictionary Source="Styles/MovieListcontentControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <converters:TabVisibilityConverter x:Key="Private.TabVisibilityConverter" />
             <converters:AndConverter x:Key="Private.AndConverter" />
@@ -43,6 +47,9 @@
             <converters:StringToSourceConverter x:Key="Private.StringToSourceConverter" />
         </ResourceDictionary>
     </Window.Resources>
+
+    <!--#endregion Resources-->
+
     <Grid ShowGridLines="True">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" MinHeight="70" />
@@ -144,15 +151,12 @@
 
         <!--  Drugi widok  -->
 
-        <StackPanel Grid.Row="2"
-                    Margin="13"
-                    Orientation="Horizontal"
-                    Visibility="{Binding SearchState,
-                                         Converter={StaticResource Private.MovieListVisibilityConverter}}"
-                    >
-            <ListBox ItemsSource="{Binding MovieList}" Style="{DynamicResource ListBox}" />
-            <Image Source="{Binding PosterSource, Converter={StaticResource Private.StringToSourceConverter}}" Style="{DynamicResource PosterImageBig}" />
-        </StackPanel>
-
+        <ContentControl Grid.Row="2"
+                        Content="{Binding ShortMovieInfo}"
+                        ContentTemplate="{DynamicResource DataTemplate.MovieList}"
+                        Margin="13"
+                        Visibility="{Binding SearchState,
+                                             Converter={StaticResource Private.MovieListVisibilityConverter}}"
+                        />
     </Grid>
 </Window>
