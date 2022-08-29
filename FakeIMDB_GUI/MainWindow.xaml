@@ -156,7 +156,7 @@
         <!--  Drugi widok  -->
 
         <ContentControl Grid.Row="2"
-                        Content="{Binding ShortMovieInfo}"
+                        Content="{Binding MovieListBase}"
                         ContentTemplate="{DynamicResource DataTemplate.MovieList}"
                         Margin="13"
                         Visibility="{Binding SearchState,

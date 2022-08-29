@@ -38,18 +38,6 @@ namespace FakeIMDB_GUI.ViewModels
             }
         }
 
-        public int CurrentPage
-        {
-            get => GetBackingValue<int>();
-            set => SetBackingValue(value);
-        }
-
-        public string PosterSource
-        {
-            get => GetBackingValue<string>();
-            set => SetBackingValue(value);
-        }
-
         public TypeOptions MediaType
         {
             get => GetBackingValue<TypeOptions>();
@@ -68,12 +56,6 @@ namespace FakeIMDB_GUI.ViewModels
             set => SetBackingValue(value);
         }
 
-        public MovieShortInfo SelectedMovieInfo
-        {
-            get => GetBackingValue<MovieShortInfo>();
-            set => SetBackingValue(value);
-        }
-
         public MovieList MovieList
         {
             get => GetBackingValue<MovieList>();
@@ -86,9 +68,9 @@ namespace FakeIMDB_GUI.ViewModels
             set => SetBackingValue(value, YearValidator);
         }
 
-        public ObservableCollection<MovieShortInfo> ShortMovieInfo
+        public MovieListBase MovieListBase
         {
-            get => GetBackingValue<ObservableCollection<MovieShortInfo>>();
+            get => GetBackingValue<MovieListBase>();
             set => SetBackingValue(value);
         }
 
@@ -124,10 +106,10 @@ namespace FakeIMDB_GUI.ViewModels
         public MainWindowViewModel(IMovieService movieService)
         {
             this.movieService = movieService;
-            InitializeCommands();
             Title = null;
             Year = null;
-            CurrentPage = 1;
+
+            InitializeCommands();
         }
 
         #region Commands
@@ -171,29 +153,24 @@ namespace FakeIMDB_GUI.ViewModels
             Search = new MyCommand(
                 async (_) =>
                 {
+                    MovieListBase = new MovieListBase();
+                    MovieListBase.CurrentPage = 1;
+
                     if (SearchState.ToString() == "ByID")
                     {
                         MovieInfo = await movieService.GetMovieByID(Title);
-                        if (MovieInfo == null)
-                        {
-                            
-                        }
                     }
                     else if (SearchState.ToString() == "ByTitle")
                     {
                         MovieInfo = await movieService.GetMovieByTitle(Title, GetValidType(), GetValidYear());
-                        if (MovieInfo == null)
-                        {
-
-                        }
                     } 
                     else if (SearchState.ToString() == "BySearch")
                     {
                         MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), 1);
                         if (MovieList != null)
                         {
-                            CurrentPage = 1;
-                            ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
+                            MovieListBase.CurrentPage = 1;
+                            MovieListBase.ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
                         }
                     }
                 });
@@ -204,12 +181,12 @@ namespace FakeIMDB_GUI.ViewModels
             NextPage = new MyCommand(
                 async (_) =>
                 {
-                    var tempCurrentPage = CurrentPage + 1;
+                    var tempCurrentPage = MovieListBase.CurrentPage + 1;
                     MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), tempCurrentPage);
                     if (MovieList != null)
                     {
-                        CurrentPage = tempCurrentPage;
-                        ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
+                        MovieListBase.CurrentPage = tempCurrentPage;
+                        MovieListBase.ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
                     }
                 });
         }
@@ -219,12 +196,12 @@ namespace FakeIMDB_GUI.ViewModels
             PreviousPage = new MyCommand(
                 async (_) =>
                 {
-                    if (CurrentPage > 1)
+                    if (MovieListBase.CurrentPage > 1)
                     {
-                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), --CurrentPage);
+                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), --MovieListBase.CurrentPage);
                         if (MovieList != null)
                         {
-                            ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
+                            MovieListBase.ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
                         }
                     }
                 });
@@ -236,7 +213,7 @@ namespace FakeIMDB_GUI.ViewModels
                 async (_) =>
                 {
                     SearchState = SearchTypes.ByID;
-                    MovieInfo = await movieService.GetMovieByID(SelectedMovieInfo.imdbID);
+                    MovieInfo = await movieService.GetMovieByID(MovieListBase.SelectedMovieInfo.imdbID);
                 });
         }
 
