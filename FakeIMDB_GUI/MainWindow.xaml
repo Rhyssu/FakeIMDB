@@ -48,6 +48,10 @@
         </ResourceDictionary>
     </Window.Resources>
 
+    <Window.InputBindings>
+        <KeyBinding Key="Tab" Command="{Binding NextTab}" />
+    </Window.InputBindings>
+
     <!--#endregion Resources-->
 
     <Grid ShowGridLines="True">

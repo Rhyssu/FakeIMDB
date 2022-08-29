@@ -9,7 +9,12 @@ namespace Domain.Entities
 {
     public record MovieInfoCache
     {
-        public MovieInfoCache(MovieInfo movie, string query, TypeOptions? mediaType = null, int? year = null, PlotOptions plotOptions = PlotOptions.Short)
+        public MovieInfoCache(
+            MovieInfo movie,
+            string query,
+            TypeOptions? mediaType = null,
+            int? year = null,
+            PlotOptions plotOptions = PlotOptions.Short)
         {
             this.Year = year;
             this.MovieInfo = movie;

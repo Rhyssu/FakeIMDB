@@ -14,7 +14,7 @@
         <Setter Property="FontSize" Value="19" />
         <Setter Property="Margin" Value="10,0,20,0" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Template" Value="{DynamicResource Template.ComboBox}" />
+        <Setter Property="Template" Value="{DynamicResource Template.InnerComboBox}" />
     </Style>
 
     <!--#endregion Styling-->
@@ -43,12 +43,22 @@
 
     <ControlTemplate x:Key="Template.InnerComboBox" TargetType="{x:Type ComboBox}">
         <Grid>
-            <ToggleButton IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource Mode=TemplatedParent}}" />
+            <ToggleButton Background="{DynamicResource TextBoxColor}"
+                          BorderThickness="0"
+                          Content="{TemplateBinding Text}"
+                          IsChecked="{Binding IsDropDownOpen,
+                                              Mode=TwoWay,
+                                              RelativeSource={RelativeSource Mode=TemplatedParent}}"
+                          />
             <ContentPresenter />
             <Popup x:Name="PART_Popup" IsOpen="{TemplateBinding ComboBox.IsDropDownOpen}">
                 <Grid>
                     <Border>
-                        <ScrollViewer Background="Azure">
+                        <ScrollViewer Width="{Binding RelativeSource={RelativeSource TemplatedParent},
+                                                      Path=ActualWidth}"
+                                      HorizontalContentAlignment="Center"
+                                      Background="{DynamicResource TextBoxColor}"
+                                      >
                             <ItemsPresenter />
                         </ScrollViewer>
                     </Border>

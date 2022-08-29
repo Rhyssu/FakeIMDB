@@ -13,9 +13,9 @@ namespace Domain.Entities
 
         public override string ToString()
         {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.AppendLine($"Response     : {Response}");
-            stringBuilder.AppendLine($"Error        : {Error}");
+            StringBuilder stringBuilder = new();
+            stringBuilder.AppendLine($"Response : {Response}");
+            stringBuilder.AppendLine($"Error : {Error}");
             return stringBuilder.ToString();
         }
     }

@@ -12,6 +12,16 @@ using System.Text.RegularExpressions;
 
 namespace FakeIMDB_GUI.ViewModels
 {
+    public static class Extensions
+    {
+        public static T Next<T>(this T src) where T : Enum
+        {
+            T[] Arr = (T[])Enum.GetValues(src.GetType());
+            int j = Array.IndexOf<T>(Arr, src) + 1;
+            return (Arr.Length == j) ? Arr[0] : Arr[j];
+        }
+    }
+
     public class MainWindowViewModel : ViewModelBase, INotifyPropertyChanged, INotifyDataErrorInfo
     {
         #region Variable Declaration
@@ -106,6 +116,8 @@ namespace FakeIMDB_GUI.ViewModels
         public MyCommand Reset { get; set; }
         public MyCommand PreviousPage { get; set; }
         public MyCommand NextPage { get; set; }
+        public MyCommand SearchSelectedListBoxItem { get; set; }
+        public MyCommand NextTab { get; set; }
 
         #endregion Variable Declaration
 
@@ -129,6 +141,8 @@ namespace FakeIMDB_GUI.ViewModels
             ResetCommand();
             NextPageCommand();
             PreviousPageCommand();
+            SearchSelectedListBoxItemCommand();
+            NextTabCommand();
         }
 
         private void ByIDCommand()
@@ -160,14 +174,22 @@ namespace FakeIMDB_GUI.ViewModels
                     if (SearchState.ToString() == "ByID")
                     {
                         MovieInfo = await movieService.GetMovieByID(Title);
+                        if (MovieInfo == null)
+                        {
+                            
+                        }
                     }
                     else if (SearchState.ToString() == "ByTitle")
                     {
                         MovieInfo = await movieService.GetMovieByTitle(Title, GetValidType(), GetValidYear());
+                        if (MovieInfo == null)
+                        {
+
+                        }
                     } 
                     else if (SearchState.ToString() == "BySearch")
                     {
-                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), CurrentPage);
+                        MovieList = await movieService.GetMovieListByTitle(Title, GetValidType(), GetValidYear(), 1);
                         if (MovieList != null)
                         {
                             CurrentPage = 1;
@@ -205,6 +227,25 @@ namespace FakeIMDB_GUI.ViewModels
                             ShortMovieInfo = new ObservableCollection<MovieShortInfo>(MovieList.Search);
                         }
                     }
+                });
+        }
+
+        private void SearchSelectedListBoxItemCommand()
+        {
+            SearchSelectedListBoxItem = new MyCommand(
+                async (_) =>
+                {
+                    SearchState = SearchTypes.ByID;
+                    MovieInfo = await movieService.GetMovieByID(SelectedMovieInfo.imdbID);
+                });
+        }
+
+        private void NextTabCommand()
+        {
+            NextTab = new MyCommand(
+                (_) =>
+                {
+                    SearchState = SearchState.Next();
                 });
         }
 
