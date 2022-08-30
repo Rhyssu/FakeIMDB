@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:converters="clr-namespace:FakeIMDB_GUI.Converters"
+        xmlns:customcontrols="clr-namespace:FakeIMDB_GUI.CustomControls"
         xmlns:enums="clr-namespace:FakeIMDB_GUI.Enums"
         xmlns:extensions="clr-namespace:FakeIMDB_GUI.Extensions"
         xmlns:helpers="clr-namespace:FakeIMDB_GUI.Helpers"
@@ -155,12 +156,18 @@
 
         <!--  Drugi widok  -->
 
-        <ContentControl Grid.Row="2"
-                        Content="{Binding MovieListBase}"
-                        ContentTemplate="{DynamicResource DataTemplate.MovieList}"
-                        Margin="13"
-                        Visibility="{Binding SearchState,
-                                             Converter={StaticResource Private.MovieListVisibilityConverter}}"
-                        />
+        <customcontrols:MovieListContentControl Grid.Row="2"
+                                                CurrentPage="{Binding CurrentPage}"
+                                                Margin="13"
+                                                MovieList="{Binding ShortMovieInfoList}"
+                                                NextPageCommand="{Binding NextPage}"
+                                                PreviousPageCommand="{Binding PreviousPage}"
+                                                SearchSelected="{Binding SearchSelectedListBoxItem}"
+                                                SelectedMovieInfo="{Binding SelectedMovieInfo,
+                                                                            Mode=TwoWay}"
+                                                Template="{DynamicResource Template.MovieList}"
+                                                Visibility="{Binding SearchState,
+                                                                     Converter={StaticResource Private.MovieListVisibilityConverter}}"
+                                                />
     </Grid>
 </Window>
