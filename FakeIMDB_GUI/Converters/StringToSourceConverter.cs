@@ -15,7 +15,7 @@ namespace FakeIMDB_GUI.Converters
         {
             if (value is string valueStr)
             {
-                // If there is no poster available from the API return default image 
+                // If there is no poster available then return default image 
                 if (valueStr == "N/A")
                 {
                     return new ImageSourceConverter().ConvertFromString("https://i.imgur.com/H9e1jV7.png");

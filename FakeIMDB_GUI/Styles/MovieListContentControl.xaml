@@ -2,6 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:converters="clr-namespace:FakeIMDB_GUI.Converters"
                     xmlns:entities="clr-namespace:Domain.Entities;assembly=Domain"
+                    xmlns:help="clr-namespace:FakeIMDB_GUI.Helpers"
                     xmlns:local="clr-namespace:FakeIMDB_GUI"
                     xmlns:vms="clr-namespace:FakeIMDB_GUI.ViewModels"
                     >
@@ -38,17 +39,15 @@
 
     <!--#region DataTemplates-->
 
-    <DataTemplate x:Key="DataTemplate.MovieList" DataType="{x:Type entities:MovieShortInfo}">
-        <DockPanel LastChildFill="True" Visibility="{Binding Title, Converter={StaticResource Private.MovieInfoDockPanelConverter}, FallbackValue=Collapsed}">
+    <DataTemplate x:Key="DataTemplate.MovieList" DataType="{x:Type help:MovieListBase}">
+        <DockPanel LastChildFill="True" Visibility="{Binding ShortMovieInfo, Converter={StaticResource Private.IsNullVisibilityConverter}, FallbackValue=Collapsed}">
             <ScrollViewer DockPanel.Dock="Left" Template="{DynamicResource Template.EmptyScrollView}">
                 <StackPanel Orientation="Vertical">
                     <ListBox ItemContainerStyle="{DynamicResource Style.MovieListItem}"
-                             ItemsSource="{Binding}"
+                             ItemsSource="{Binding ShortMovieInfo}"
                              ScrollViewer.VerticalScrollBarVisibility="Hidden"
                              SelectedIndex="0"
-                             SelectedItem="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
-                                                                                   AncestorType={x:Type Window}},
-                                                    Path=DataContext.SelectedMovieInfo}"
+                             SelectedItem="{Binding SelectedMovieInfo}"
                              Style="{DynamicResource Style.MovieListListBox}"
                              >
                         <ListBox.InputBindings>
@@ -84,7 +83,7 @@
                                         TextBlock.FontSize="15"
                                         >
                                 <Label Content="Current Page: " />
-                                <Label Content="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CurrentPage}" />
+                                <Label Content="{Binding CurrentPage}" />
                             </StackPanel>
                         </Border>
                         <Button Command="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
@@ -100,7 +99,7 @@
                 </StackPanel>
             </ScrollViewer>
             <Grid DockPanel.Dock="Right">
-                <Image Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.SelectedMovieInfo.Poster, Converter={StaticResource Private.StringToSourceConverter}}" />
+                <Image Source="{Binding SelectedMovieInfo.Poster, Converter={StaticResource Private.StringToSourceConverter}}" />
             </Grid>
         </DockPanel>
     </DataTemplate>
