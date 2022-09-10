@@ -15,7 +15,5 @@ namespace Application.Interfaces.Repositories
         IQueryable<MovieShortInfo> GetMovieShorts();
         Task AddMovieToDatabaseAsync (MovieInfoCache movie, CancellationToken cancellationToken = default);
         Task AddMovieListToDatabaseAsync (MovieListCache movieList, CancellationToken cancellationToken = default);
-        
-        // TODO: Something to clear the cache with? // Or maybe somethings that clears the database after some time has passed.
     }
 }

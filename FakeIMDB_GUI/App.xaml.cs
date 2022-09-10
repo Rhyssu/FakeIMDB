@@ -18,6 +18,7 @@ using Serilog;
 using Microsoft.Extensions.Logging;
 using FakeIMDB_GUI.ViewModels;
 using FakeIMDB_GUI.Helpers;
+using FakeIMDBTesting;
 
 namespace FakeIMDB_GUI
 {
@@ -57,6 +58,7 @@ namespace FakeIMDB_GUI
             services.Configure<DatabaseSettings>(context.Configuration.GetRequiredSection("DatabaseSettings"));
 
             services.AddSingleton<MainWindowViewModel>();
+            services.AddSingleton<OMDBRepositoryTesting>();
             services.AddSingleton<MainWindow>();
         }
         public void OnStartup(object sender, StartupEventArgs e)

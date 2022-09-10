@@ -35,8 +35,12 @@ namespace Infrastructure.Repositories
         {
             string query = ConstructGetByIDQuery(id, type, year, plot);
             string response = await APIResponseBody(query, cancellationToken);
-            TryToDeserialize<MovieInfo>(response, out var newMovie);
-            return newMovie;
+            if (!string.IsNullOrEmpty(response))
+            {
+                TryToDeserialize<MovieInfo>(response, out var newMovie);
+                return newMovie;
+            }
+            return null;
         }
 
         public async Task<MovieInfo> GetMovieByTitle(
@@ -48,8 +52,12 @@ namespace Infrastructure.Repositories
         {
             string query = ConstructGetByTitleQuery(title, type, year, plot);
             string response = await APIResponseBody(query, cancellationToken);
-            TryToDeserialize<MovieInfo>(response, out var newMovie);
-            return newMovie;
+            if (!string.IsNullOrEmpty(response))
+            {
+                TryToDeserialize<MovieInfo>(response, out var newMovie);
+                return newMovie;
+            }
+            return null;
         }
 
         public async Task<MovieList> GetMovieListByTitle(
@@ -61,8 +69,12 @@ namespace Infrastructure.Repositories
         {
             string query = ConstructMovieListQuery(title, type, year, page);
             string response = await APIResponseBody(query, cancellationToken);
-            TryToDeserialize<MovieList>(response, out var newList);
-            return newList;
+            if (!string.IsNullOrEmpty(response))
+            {
+                TryToDeserialize<MovieList>(response, out var newList);
+                return newList;
+            }
+            return null;
         }
 
         private string ConstructGetByTitleQuery(
@@ -83,7 +95,10 @@ namespace Infrastructure.Repositories
             }
 
             movieParameters.Add($"plot={plot}");
-            movieParameters.Add($"apikey={apiSettings.APIKey}");
+            if (apiSettings != null)
+            {
+                movieParameters.Add($"apikey={apiSettings.APIKey}");
+            }
             return string.Join("&", movieParameters);
         }
 
@@ -103,9 +118,11 @@ namespace Infrastructure.Repositories
             {
                 movieParameters.Add($"y={year}");
             }
-
             movieParameters.Add($"plot={plot}");
-            movieParameters.Add($"apikey={apiSettings.APIKey}");
+            if (apiSettings != null)
+            {
+                movieParameters.Add($"apikey={apiSettings.APIKey}");
+            }
             return string.Join("&", movieParameters);
         }
 
@@ -128,8 +145,10 @@ namespace Infrastructure.Repositories
             {
                 movieParameters.Add($"page={page}");
             }
-
-            movieParameters.Add($"apikey={apiSettings.APIKey}");
+            if (apiSettings != null)
+            {
+                movieParameters.Add($"apikey={apiSettings.APIKey}");
+            }
             return string.Join("&", movieParameters);
         }
 
@@ -146,7 +165,8 @@ namespace Infrastructure.Repositories
             catch (HttpRequestException ex)
             {
                 logger.LogError(ex, "Could not retrieve movie search list.");
-                throw new CouldNotRetrieveMoviesDataException();
+                // throw new CouldNotRetrieveMoviesDataException();
+                return null;
             }
         }
         private bool TryToDeserialize<T>(string json, out T movie) where T : class
